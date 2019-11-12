@@ -1,0 +1,31 @@
+{
+    "name": "github-user/package-name",
+    "description": "Package with nice stuff",
+    "version" : "v1.0.0",
+    "type": "library",    
+    "require" : {
+        "php" : ">=7.1",
+        "ext-mbstring": "*",
+        "ext-curl": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "User Name",
+            "email": "user@email.here",
+            "homepage": "https://domain.here",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "YourNamespace\\PackageName\\": "src/"
+        }
+    },
+    "support": {
+        "email": "user@email.here",
+        "wiki": "https://domain.here",
+        "docs": "https://domain.here"
+    }	
+}
