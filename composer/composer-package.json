@@ -1,0 +1,38 @@
+    {
+        "name": "github-user/packagename",
+        "description": "My first Composer project",
+        "authors": [
+            {
+                "name": "Your Name",
+                "email": "user@email.here",
+                "homepage": "https://domain.here",
+                "role": "Developer"
+            }
+        ],
+        "minimum-stability": "dev",
+        "require": {
+            "php": ">=7.1",
+            "ext-mbstring": "*",
+            "ext-curl": "*"
+        },
+        "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://bitbucket.org/username/hello-world"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/username/hello-world"
+        }
+        ],
+        "autoload": {
+            "psr-4": {
+                "YourPackageNamespace\\": "src/"
+            }
+        },
+        "support": {
+            "email": "user@email.here",
+            "wiki": "https://domain.here",
+            "docs": "https://domain.here"
+        }
+    }
