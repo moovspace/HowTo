@@ -82,7 +82,7 @@ $create = new CreateUser();
 ?>
 ```
 
-### Dodaj pakiety,biblioteki do projrktu w composer.json
+### Dodaj pakiety,biblioteki do projektu w composer.json
 ```json
 {
     "name": "acme/blog",
