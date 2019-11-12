@@ -7,7 +7,17 @@
         "php" : ">=7.1",
         "ext-mbstring": "*",
         "ext-curl": "*"
-    },
+    },    
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://bitbucket.org/username/hello-world"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/username/hello-world"
+        }
+    ],
     "license": "MIT",
     "authors": [
         {
