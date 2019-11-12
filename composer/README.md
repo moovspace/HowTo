@@ -82,10 +82,10 @@ $create = new CreateUser();
 ?>
 ```
 
-### Dodaj pakiety,biblioteki do projektu w composer.json
+### Dodaj pakiety,biblioteki do projektu w composer.json (dev-master or stable or version: ^6.1 or >=6.1)
 ```json
 {
-    "name": "acme/blog",
+    "name": "github-user/blog",
     "repositories": [
         {
             "type": "vcs",
@@ -102,5 +102,12 @@ $create = new CreateUser();
         "acme/hello-world": "^6.1"
     }
 }
+```
+
+### Tworzenie autoload vendor z composer
+```bash
+composer dump
+composer dump-autoload 
+composer dump-autoload -o
 ```
 
