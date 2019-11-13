@@ -1,6 +1,7 @@
 # PhpUnit tests
 - Na początek: https://phpunit.de/getting-started/phpunit-8.html
 - Dokumentacja: https://phpunit.readthedocs.io/en/8.4/assertions.html
+- Wideo: https://www.youtube.com/watch?v=V3xrGsUIYis
 
 ### Dodaj phpunit do projektu, biblioteki composera (zainstaluj composer)
 ```bash
