@@ -1,5 +1,6 @@
 # PhpUnit tests
-Dokumentacja https://phpunit.readthedocs.io/en/8.4/assertions.html
+- Na początek: https://phpunit.de/getting-started/phpunit-8.html
+- Dokumentacja: https://phpunit.readthedocs.io/en/8.4/assertions.html
 
 ### Dodaj phpunit do projektu, biblioteki composera (zainstaluj composer)
 ```bash
@@ -124,7 +125,6 @@ cd new_proj
          bootstrap="tests/bootstrap.php"
          colors="true"
          verbose="true"
-
 		 backupGlobals="false"
          bootstrap="vendor/autoload.php"
          backupStaticAttributes="false"
