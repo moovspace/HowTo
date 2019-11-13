@@ -27,7 +27,7 @@ composer update
             "YourPackageNamespace\\": "src/",
             "YourPackageNamespace\\PackageName\\": "src/"
         },
-        "classmap": [
+		"classmap": [
             "src/"
         ]
     },

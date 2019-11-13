@@ -2,15 +2,15 @@
     "name": "github-user/package-name",
     "description": "Package with nice stuff",
     "version" : "v1.0.0",
-    "type": "library",    
+    "type": "library",
     "require" : {
         "php" : ">=7.1",
         "ext-mbstring": "*",
         "ext-curl": "*"
     },
-	"require-dev": {
-	    "phpunit/phpunit": "^8"
-	},
+    "require-dev": {
+        "phpunit/phpunit": "^8"
+    },
     "repositories": [
         {
             "type": "vcs",
@@ -35,13 +35,13 @@
         "psr-4": {
             "YourNamespace\\PackageName\\": "src/"
         },
-		"classmap": [
-	        "src/"
-	    ]
+        "classmap": [
+            "src/"
+        ]
     },
     "support": {
         "email": "user@email.here",
         "wiki": "https://domain.here",
         "docs": "https://domain.here"
-    }	
+    }
 }
