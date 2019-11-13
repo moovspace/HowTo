@@ -7,7 +7,10 @@
         "php" : ">=7.1",
         "ext-mbstring": "*",
         "ext-curl": "*"
-    },    
+    },
+	"require-dev": {
+	    "phpunit/phpunit": "^8"
+	},
     "repositories": [
         {
             "type": "vcs",
@@ -31,7 +34,10 @@
     "autoload": {
         "psr-4": {
             "YourNamespace\\PackageName\\": "src/"
-        }
+        },
+		"classmap": [
+	        "src/"
+	    ]
     },
     "support": {
         "email": "user@email.here",

@@ -10,29 +10,35 @@
             }
         ],
         "minimum-stability": "dev",
-        "require": {
+	    "require": {
             "php": ">=7.1",
             "ext-mbstring": "*",
             "ext-curl": "*"
         },
+		"require-dev": {
+		    "phpunit/phpunit": "^8"
+		},
         "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://bitbucket.org/username/hello-world"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/username/hello-world"
-        }
+		    {
+		        "type": "vcs",
+		        "url": "https://bitbucket.org/username/hello-world"
+		    },
+		    {
+		        "type": "vcs",
+		        "url": "https://github.com/username/hello-world"
+		    }
         ],
         "autoload": {
             "psr-4": {
                 "YourPackageNamespace\\": "src/"
-            }
+            },
+			"classmap": [
+		        "src/"
+		    ]
         },
         "support": {
             "email": "user@email.here",
             "wiki": "https://domain.here",
             "docs": "https://domain.here"
-        }
+        }		
     }
