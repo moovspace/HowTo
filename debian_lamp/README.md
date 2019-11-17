@@ -52,7 +52,7 @@ include /home/usero/Www/virtualhost/*.conf
 ```
 
 ### Przykład virtual hosts
-/home/usero/Www/virtualhost/pages.conf
+sudo nano /home/usero/Www/virtualhost/pages.conf
 ```bash
 <VirtualHost *:80>
 	ServerName localhost
@@ -71,7 +71,7 @@ include /home/usero/Www/virtualhost/*.conf
 
 <VirtualHost *:80>
         ServerName test.xx
-    	ServerAlias www.test.xx
+	ServerAlias www.test.xx
         ServerAdmin webmaster@localhost
         DocumentRoot /home/usero/Www/html/test
         LogLevel info ssl:warn
@@ -165,4 +165,29 @@ sudo ufw allow https
 sudo nano /etc/hosts
 ```bash
 127.0.0.1 localhost test.xx www.test.xx your-domain.xx
+```
+
+### Konfiguracja apache2 prefork (opcjonalnie)
+sudo nano /etc/apache2/mods-available/mpm_prefork.conf
+```bash
+# prefork MPM
+# StartServers: number of server processes to start
+# MinSpareServers: minimum number of server processes which are kept spare
+# MaxSpareServers: maximum number of server processes which are kept spare
+# MaxRequestWorkers: maximum number of server processes allowed to start
+# MaxConnectionsPerChild: maximum number of requests a server process serves
+ 
+<IfModule mpm_prefork_module>
+	StartServers		   5
+	MinSpareServers		   5
+	MaxSpareServers		   30
+	MaxRequestWorkers	   200
+	MaxConnectionsPerChild 1
+</IfModule>
+```
+
+### Włączenie modułu
+```bash
+sudo a2dismod mpm_event
+sudo a2enmod mpm_prefork
 ```
