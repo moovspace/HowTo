@@ -24,6 +24,9 @@ GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
+# Utwórz bazę danych
+CREATE DATABASE bdname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 # wyjście
 exit
 
@@ -190,4 +193,16 @@ sudo nano /etc/apache2/mods-available/mpm_prefork.conf
 ```bash
 sudo a2dismod mpm_event
 sudo a2enmod mpm_prefork
+```
+
+### Mysql table backup, restore
+```bash
+# Backup database
+mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
+
+# Backup all databases
+mysqldump --all-databases -add-drop-database --single-transaction --quick --lock-tables=false > full-backup-$(date +%F).sql -hlocalhost -uroot -ptoor
+
+# Restore database
+mysql -hlocalhost -uroot -phaslo dbname < dbname-backup.sql
 ```
