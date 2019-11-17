@@ -71,7 +71,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 
 <VirtualHost *:80>
         ServerName test.xx
-	ServerAlias www.test.xx
+    	ServerAlias www.test.xx
         ServerAdmin webmaster@localhost
         DocumentRoot /home/usero/Www/html/test
         LogLevel info ssl:warn
@@ -182,7 +182,7 @@ sudo nano /etc/apache2/mods-available/mpm_prefork.conf
 	MinSpareServers		   5
 	MaxSpareServers		   30
 	MaxRequestWorkers	   200
-	MaxConnectionsPerChild 1
+	MaxConnectionsPerChild 100
 </IfModule>
 ```
 
