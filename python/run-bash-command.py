@@ -64,3 +64,34 @@ Hello, welcome to
 the world of Python
 """
 print(str4)
+
+### Write to file
+file = open("test.txt","w+")
+file.write("Line 111\r\n")
+file.write("Line 222\r\n")
+file.write("Line 333\r\n")
+file.close()
+
+### Read from file
+ff = open("test.txt", "r")
+t =  ff.read()
+print("All lines: ", t)
+
+### Read lines ["one","two","..."]
+f = open("test.txt", "r")
+t = f.readlines()
+print(t)
+for i in t:
+	print(i)
+
+# or
+file = open("test.txt", "r")
+for line in file:
+	print("Each line: ", line)
+	words = line.split()
+
+### Append to file
+f1 = open("test.txt","a+")
+f1.write("Hello World Append")
+for i in range(2):
+     f1.write("Appended line %d\r\n" % (i+1))
