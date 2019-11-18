@@ -12,5 +12,6 @@ Banner theme updated bottom bar color to bg color with green foreground
 - Storm
 - Service
 - Tron
+- Hive
 - Eva Dark Bold (usunąć coś z folderu trzeba 45MB zbędne)
 
