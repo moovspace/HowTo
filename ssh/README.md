@@ -114,6 +114,9 @@ sudo ufw enable
 
 ### Restart serwera
 ```bash
+# Reload
+sudo systemctl reload ssh
+# lub restart
 sudo systemctl restart ssh
 ```
 
