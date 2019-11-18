@@ -30,6 +30,10 @@ do forward zones czyli na servery na port :853 (tls)
 sudo nano /etc/unbound/unbound.conf
 ```bash
 server:
+	# Unbound
+	directory: "/etc/unbound"
+	username: unbound
+
 	# Port
         port:53
 	# Port tls
@@ -49,7 +53,9 @@ server:
         # Pozwala na zapytania z tych ip
         access-control: 192.168.0.0/16 allow
         access-control: 127.0.0.1/24 allow
+	access-control: 10.0.0.0/8 allow
         access-control: ::1 allow
+        access-control: 2001:DB8::/64 allow
 
         verbosity: 1
 	hide-version: yes
