@@ -64,6 +64,7 @@ IgnoreRhosts yes
 AllowTcpForwarding no
 X11Forwarding no
 AllowAgentForwarding no
+PermitTunnel no
 # No root login
 # PermitRootLogin no
 # Allow only users
