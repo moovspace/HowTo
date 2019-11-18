@@ -1,4 +1,5 @@
 # Klucze ssh debian
+Folder domowy z kluczami ssh zalogowanego usera to: ~/.ssh
 
 ### Login do ssh
 ```bash
@@ -23,10 +24,12 @@ ls ~/.ssh
 ls /home/username/.ssh
 ```
 
-### Kopiowanie klucza na server
+### Kopiowanie klucza publicznego na server, vps
 Kopiuje klucz publiczny z: ~/.ssh/id_rsa.pub do zdalnego servera do pliku: ~/.ssh/authorized_keys (kluczy w tym pliku może być kilka)
 ```bash
 ssh-copy-id user@remote_vps_host_or_ip
+
+ssh-copy-id -i ~/.ssh/id_rsa.pub user@remote_vps_host_or_ip
 ```
 
 ### Kopiowanie klucza z ssh
@@ -79,7 +82,7 @@ PermitTunnel no
 # AllowUsers root username
 ```
 
-# Firewall
+### Firewall
 ```bash
 # Open port 22 for ssh
 sudo ufw allow from 89.230.0.0/16 to any port 22
@@ -87,7 +90,12 @@ sudo ufw logging on
 sudo ufw enable
 ```
 
-# Restart servera
+### Restart serwera
 ```bash
 sudo systemctl restart ssh
+```
+
+### Dodanie kluczy do agenta ssh
+```bash
+ssh-add ~/.ssh/id_rsa
 ```
