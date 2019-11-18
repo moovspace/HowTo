@@ -50,9 +50,11 @@ cat ~/.ssh/id_rsa.pub
 mkdir -p ~/.ssh
 # Dodaj klucz do pliku
 nano ~/.ssh/authorized_keys
-# Zmień uprawnienia pliku
+# Zmień uprawnienia pliku (root - nazwa użytkownika)
+chown -R root:root ~/.ssh
 chmod -R go= ~/.ssh
-chown -R username:username ~/.ssh
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
 ```
 
 ### Konfiguracja
@@ -75,18 +77,37 @@ AllowTcpForwarding no
 X11Forwarding no
 AllowAgentForwarding no
 PermitTunnel no
+
 # Gateway setting
 # GatewayPorts no
+
 # No root login
 # PermitRootLogin no
+
 # Allow only users
 # AllowUsers root username
 ```
 
 ### Firewall
 ```bash
-# Open port 22 for ssh
-sudo ufw allow from 89.230.0.0/16 to any port 22
+# Install
+sudo apt install -y ufw
+
+# Ze wsystkich adresów ip tcp
+sudo ufw allow 22/tcp
+
+# Lub dla konkretnych ip maski /24 /16 /8
+sudo ufw allow from 1.1.0.0/16 to any port 22 proto tcp
+
+# Zablokuj inne porty 
+# Odblokuj koniecznie port 22 do firewalla:
+# ufw allow 22/tcp
+# ufw allow from 1.2.3.4/16 to any port 22 proto tcp
+# Bo zablokujesz dostęp do servera !!!
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+
+# Uruchom i zapisz
 sudo ufw logging on
 sudo ufw enable
 ```
