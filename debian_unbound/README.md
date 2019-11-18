@@ -33,7 +33,8 @@ server:
         # Tls
         tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
 
-	# Tls service	
+	# Tls service
+	tls-port: 853	
 	tls-service-key: /etc/ssl/private/ssl-cert-snakeoil.key 
 	tls-service-pem: /etc/ssl/certs/ssl-cert-snakeoil.pem
 
@@ -50,6 +51,9 @@ server:
         access-control: ::1 allow
 
         verbosity: 1
+	hide-version: yes
+	hide-identity: yes
+	# do-not-query-localhost: no
 
         # Listen on all interfaces on port 853, answer queries from the local subnet.
         # interface: 0.0.0.0@53
