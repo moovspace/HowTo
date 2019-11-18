@@ -1,12 +1,26 @@
 # Klucze ssh debian
 
+### Login do ssh
+```bash
+ssh username@remote_host_or_ip
+
+# Lub z konkretnym kluczem
+ssh -i ~/.ssh/id_rsa.priv username@remote_host_or_ip
+```
+
 ### Nowy klucz
 ```bash
 ssh-keygen -b 4096
 ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"
 
+# Lub inne warianty
+ssh-keygen -t dsa
+ssh-keygen -t ecdsa -b 521
+ssh-keygen -t ed25519
+
 # Zobacz klucze
 ls ~/.ssh
+ls /home/username/.ssh
 ```
 
 ### Kopiowanie klucza na server
@@ -35,14 +49,6 @@ nano ~/.ssh/authorized_keys
 # Zmień uprawnienia pliku
 chmod -R go= ~/.ssh
 chown -R username:username ~/.ssh
-```
-
-### Login z ssh
-```bash
-ssh username@remote_host_or_ip
-
-# Lub z konkretnym kluczem
-ssh -i ~/.ssh/id_rsa.priv username@remote_host_or_ip
 ```
 
 ### Konfiguracja
