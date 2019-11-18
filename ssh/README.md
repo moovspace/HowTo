@@ -43,7 +43,8 @@ cat ~/.ssh/id_rsa.pub | ssh remote_username@remote_vps_host_or_ip "mkdir -p ~/.s
 # Lokalny server, desktop pokaż klucz
 cat ~/.ssh/id_rsa.pub
 ```
-### Zdalny server, vps
+
+## Zdalny server, vps
 ```bash
 # Utwórz folder
 mkdir -p ~/.ssh
