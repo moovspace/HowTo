@@ -1,4 +1,4 @@
-# komendy bash w php bez sudo (exec)
+# PHP shell_exec() vs exec() bez sudo w apache2
 Pozwól apache2 (user: www-data) php na używanie aplikacji konsolowych
 ```bash
 # Edit sudo
