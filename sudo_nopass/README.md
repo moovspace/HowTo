@@ -1,5 +1,5 @@
-# Bash commands w php bez sudo (exec)
-Pozwól apache2 php na używanie aplikacji konsolowych
+# komendy bash w php bez sudo (exec)
+Pozwól apache2 (user: www-data) php na używanie aplikacji konsolowych
 ```bash
 # Edit sudo
 nano /etc/sudoers
@@ -8,7 +8,6 @@ nano /etc/sudoers
 www-data     ALL=(ALL) NOPASSWD:ALL
 
 # Root privileges without password for user
-# apache2 user: www-data
 www-data     ALL = NOPASSWD: /bin/chmod, /bin/chown, /bin/tar
 
 # Members of the admin group may gain root privileges
@@ -19,4 +18,18 @@ www-data     ALL = NOPASSWD: /bin/chmod, /bin/chown, /bin/tar
 
 # Allow members of group sudo to execute any command
 # %sudo   ALL=(ALL:ALL) ALL
+```
+
+### Nadanie użytkownikom uprawnień root
+```bash
+# Dodaj linję do pliku i zapisz (CTRL+O i CTRL+X)
+nano /etc/sudoers
+# Pozwól userom z grupy sudo na wykonywanie poleceń jak root z hasłem
+%sudo   ALL=(ALL:ALL) ALL
+
+# Dodaj usera do grupy z treminala
+usermod -a -G sudo username
+
+# Lub usuń usera z grupy
+deluser username sudo
 ```
