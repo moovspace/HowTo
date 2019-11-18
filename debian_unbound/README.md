@@ -30,16 +30,17 @@ do forward zones czyli na servery na port :853 (tls)
 sudo nano /etc/unbound/unbound.conf
 ```bash
 server:
+	# Port
+        port:53
+	# Port tls
+	tls-port: 853	
+
         # Tls
         tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
 
 	# Tls service
-	tls-port: 853	
 	tls-service-key: /etc/ssl/private/ssl-cert-snakeoil.key 
 	tls-service-pem: /etc/ssl/certs/ssl-cert-snakeoil.pem
-
-        # Na porcie 53
-        # port:53
 
         # Nasłuchuje na tych
         interface: 0.0.0.0
@@ -60,13 +61,14 @@ server:
         # interface: ::0@53
 
 forward-zone:
-        forward-first: no
+	# Tls
         forward-tls-upstream: yes
 
         # Wszystkie domeny
         name: "."
 
         # Przekazuje na te servery dns z tls na port 853
+        forward-first: no
 
         # Cloudflare 
         forward-addr: 2606:4700:4700::1111@853#cloudflare-dns.com
