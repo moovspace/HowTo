@@ -65,6 +65,8 @@ AllowTcpForwarding no
 X11Forwarding no
 AllowAgentForwarding no
 PermitTunnel no
+# Gateway setting
+# GatewayPorts no
 # No root login
 # PermitRootLogin no
 # Allow only users
