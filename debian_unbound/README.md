@@ -12,16 +12,17 @@ sudo apt-get remove --auto-remove avahi-daemon
 ### Dns servers
 nano /etc/resolv.conf
 ```bash
-# Zmień w pliku
-nameserver 1.1.1.1
-nameserver 8.8.8.8
+# Zmień w pliku /etc/resolv.conf
+nameserver 127.0.0.1
+# nameserver 1.1.1.1
+# nameserver 8.8.8.8
 
 # Dodaj z terminala (nie nadpisuj resolv.conf)
 echo 'make_resolv_conf() { :; }' > /etc/dhcp/dhclient-enter-hooks.d/leave_my_resolv_conf_alone
 chmod 755 /etc/dhcp/dhclient-enter-hooks.d/leave_my_resolv_conf_alone
 
 ### Jak to ddziała
-Ustawiamy w /etc/resolv.conf namserver na nasz lokalny 127.0.0.1
+Ustawiam w /etc/resolv.conf namserver na lokalny 127.0.0.1
 Wszystko co przyjdzie na port: 53 (unbound) będzie przekiwrowane 
 do forward zones czyli na servery na port :853 (tls)
 
@@ -31,6 +32,11 @@ sudo nano /etc/unbound/unbound.conf
 server:
         # Tls
         tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
+
+	# Tls service	
+	tls-service-key: /etc/ssl/private/ssl-cert-snakeoil.key 
+	tls-service-pem: /etc/ssl/certs/ssl-cert-snakeoil.pem
+
         # Na porcie 53
         # port:53
 
@@ -56,7 +62,7 @@ forward-zone:
         # Wszystkie domeny
         name: "."
 
-        # Przekazuje na te servery dns z tls na port 853 (podobno)
+        # Przekazuje na te servery dns z tls na port 853
 
         # Cloudflare 
         forward-addr: 2606:4700:4700::1111@853#cloudflare-dns.com
