@@ -2,7 +2,7 @@
 // Parametry z command line
 // php -f /path/to/the/file.php first_param second_param
 // print_r($argv);
-// Nazwa path skryptu to: $argv[0] 
+// Nazwa path skryptu to: $argv[0]
 // Pierwszy argument to: $argv[1]
 foreach($argv as $a){
     echo "Arg : " . $a . "\r\n";
@@ -13,18 +13,18 @@ $out = shell_exec('/tmp/myscript.php '.escapeshellarg($my_url).' '.escapeshellar
 $out = shell_exec('/tmp/myscript.php '.escapeshellarg($my_url).' '.escapeshellarg($my_refer));
 $out = shell_exec(sprintf('/tmp/my_script.php "%s" "%s"', $my_url, $my_refer));
 
-// exec 
+// exec
 $out = exec("php /var/www/unity/src/emailer.php 123");
 $out = exec("/usr/bin/php -f {$fileName} {$options} > /var/www/ztest/log01.txt 2>&1 &");
 
-// zip 
+// zip
 $out = shell_exec("gunzip -c -t $path_to_backup_file 2>&1");
 
 // Przykład z output do pliku
 $fileName = '/var/www/html/helloworld.php 123';
 $options = 'target=321';
 exec("/usr/bin/php -f {$fileName} {$options} > /var/www/ztest/log01.txt 2>&1 &");
-echo "Bye bye ..."; 
+echo "Bye bye ...";
 
 // putenv('LANG=en_US.UTF-8');
 // shell_exec('env -i /home/www/myscript');
