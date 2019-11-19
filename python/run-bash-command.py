@@ -1,15 +1,15 @@
+### Lists, arrays
 cars = ["Ford", "Volvo", "BMW"]
 x = len(cars)
 cars.append("Honda")
 
 # remove, copy, clear, insert, append
 # cars.remove("Volvo")
-
 # delete
 # cars.pop(0)
-
 # index
 # x = fruits.index("BMW")
+
 for i in cars:
 	print(i)
 
@@ -26,26 +26,36 @@ print(a)
 for i in a:
 	print("Loop ", i)
 
-### Function Foreach
+### Foreach function
 def forEach(list, function):
   for i,v in enumerate(list):
     function(v, i, list)
 
-### Function update
+### Function 1
 def install_function1():
     import os
     os.system('sudo netstat -tulpn')
     # os.system('sudo apt-get update')
 
-### Function update
+### Function 2
 def install_function2():
     import subprocess
     subprocess.call("sudo netstat -tulpn", shell=True)
     # subprocess.call("sudo apt-get update", shell=True)
 
+### Function 3
+def install_function3():
+        import subprocess
+        from subprocess import STDOUT
+        import os
+        proc = subprocess.Popen('apt-get install -y nano', shell=True, stdin=None, stdout=open(os.devnull,"wb"), stderr=STDOUT, executable="/bin/bash")
+        proc = subprocess.Popen('apt-get install -y nano', shell=True, stdin=None, stdout=open('run.txt',"wb"), stderr=STDOUT, executable="/bin/bash")
+        proc.wait()
+
 ### Function call
 install_function1()
 install_function2()
+install_function3()
 
 ### Strings
 str1 = 'Hello'
