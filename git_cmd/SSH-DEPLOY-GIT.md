@@ -1,4 +1,4 @@
-# Bitbucket deploy with ssh, ssh-keys and git
+# Git deploy with ssh, ssh-keys and git
 ## git clone --depth=1
 Disable password logins on ssh user only with ssh-keys.
 
@@ -27,7 +27,7 @@ ssh -t username@hostname -c "cd /var/www; git clone --depth=1 git://someserver/s
 ssh -t username@hostname -c "cd /var/www; git --work-tree=/var/www/ --git-dir=/var/repo checkout -f master"
 ```
 
-### Download bitbucket repository terminal
+### Download repository terminal
 ```sh
 wget https://bitbucket.org/codetube/tronix/get/master.git
 wget https://bitbucket.org/codetube/tronix/get/master.tar.gz
