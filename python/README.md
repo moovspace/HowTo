@@ -13,7 +13,7 @@ def install_function1():
 def install_function2():
     import subprocess
     subprocess.call("sudo netstat -tulpn", shell=True)
-    # subprocess.call("sudo apt-get update", shell=True)
+    # subprocess.run("sudo apt-get update", shell=True)
 
 ### Function 3
 def install_function3():
