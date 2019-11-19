@@ -11,9 +11,11 @@ ssh -i ~/.ssh/id_rsa.priv username@remote_host_or_ip
 
 ### Nowy klucz
 ```bash
+# W katalogu: ~/.ssh/id_rsa
 ssh-keygen -b 4096
-ssh-keygen -t rsa -b 4096 -C "your_email@domain.com"
-
+ssh-keygen -t rsa -b 4096 -C "email@domain.xx"
+# Lub z nazwą klucza
+ssh-keygen -f ~/.ssh/key-ecdsa -t ecdsa -b 521
 # Lub inne warianty
 ssh-keygen -t dsa
 ssh-keygen -t ecdsa -b 521
