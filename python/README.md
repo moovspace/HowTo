@@ -31,8 +31,8 @@ install_function3()
 ```
 ### Uruchom
 ```bash
-chmod +x filename.py
-sudo python3 filename.py
+chmod +x run.py
+sudo python3 run.py
 ```
 
 ### Prosty przykład podstawowych rzeczy
