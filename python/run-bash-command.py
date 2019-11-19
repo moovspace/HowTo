@@ -101,7 +101,7 @@ for i in t:
 	print(i)
 
 # or
-file = open("test.txt", "r")
+file = open("test.txt", "r", encoding='utf-8')
 for line in file:
 	print("Each line: ", line)
 	words = line.split()
