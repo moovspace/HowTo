@@ -1,13 +1,19 @@
+#!/usr/bin/env python
+
+### Scripy args
+import sys
+num = sys.argv[1]
+for i in range(int(num)):
+    print (i)
+
+### Lists, arrays
 cars = ["Ford", "Volvo", "BMW"]
 x = len(cars)
 cars.append("Honda")
-
 # remove, copy, clear, insert, append
 # cars.remove("Volvo")
-
 # delete
 # cars.pop(0)
-
 # index
 # x = fruits.index("BMW")
 for i in cars:
@@ -48,7 +54,7 @@ def install_function3():
 	import subprocess
 	from subprocess import STDOUT
 	import os
-	# proc = subprocess.Popen('apt-get install -y nano', shell=True, stdin=None, stdout=open(os.devnull,"wb"), stderr=STDOUT, executable="/bin/bash")
+	proc = subprocess.Popen('sudo netstat -tulpn', shell=True, stdin=None, stdout=open(os.devnull,"wb"), stderr=STDOUT, executable="/bin/bash")
 	# proc = subprocess.Popen('apt-get install -y nano', shell=True, stdin=None, stdout=open('run.txt',"wb"), stderr=STDOUT, executable="/bin/bash")
 	# proc.wait()
 

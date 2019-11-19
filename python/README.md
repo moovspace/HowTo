@@ -31,6 +31,7 @@ install_function3()
 ```
 ### Uruchom
 ```bash
+chmod +x filename.py
 sudo python3 filename.py
 ```
 
