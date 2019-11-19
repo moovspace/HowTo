@@ -111,7 +111,7 @@ tcp        0      0 192.168.0.101:45176     8.8.8.8:853             TIME_WAIT   
 ### Przetestuj
 ```bash
 # Zainstaluj
-apt install -y tcpdump dnsutils
+apt install -y tcpdump dnsutils net-tools
 
 # Uruchom
 sudo tcpdump
