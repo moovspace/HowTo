@@ -147,11 +147,11 @@ git push origin --delete <tagname>
 
 ### Links
 ```txt
-# git --no-ff 
+# Git --no-ff 
 https://nvie.com/posts/a-successful-git-branching-model/
 https://kamiljozwiak.net/gitflow-czyli-jak-korzystac-z-gita-i-nie-zwariowac/
 
-# git links
+# Git links
 https://kamiljozwiak.net/gitflow-czyli-jak-korzystac-z-gita-i-nie-zwariowac/
 http://www.inanzzz.com/index.php/post/cs32/working-with-git-release-branches
 https://blog.axosoft.com/gitflow/
