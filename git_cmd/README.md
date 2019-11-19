@@ -164,4 +164,3 @@ git status
 git cat-file -p <hash>
 git cat-file -t <hash>
 ```
-
