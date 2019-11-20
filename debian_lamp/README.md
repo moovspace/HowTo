@@ -10,7 +10,12 @@ nano /etc/sudoers
 usermod -a -G sudo your_user_name
 ```
 
-### Instalacja Lamp debian 10
+## Lub zaloguj się na root (nie dodajesz: sudo ...)
+```bash
+su -
+```
+
+### Instalacja Lamp debian 10 (dla usera root bez: sudo)
 ```bash
 # Zainstaluj apache, php i mysql server
 sudo apt -y install apache2 mariadb-server 
