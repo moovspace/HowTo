@@ -1,20 +1,27 @@
 # Apache2 lamp serwer debian 10 buster
 
+## Włączenie sudo w Debian 10
+nano /etc/sudoers
+```bash
+# Odkomentuj i zapisz CTRL+O, CTRL+X
+%sudo   ALL=(ALL:ALL) ALL
+
+# Dodaj usera do grupy z treminala
+usermod -a -G sudo your_user_name
+```
+
 ### Instalacja Lamp debian 10
 ```bash
 # Zainstaluj apache, php i mysql server
-apt -y install apache2 mariadb-server 
-apt -y install php libapache2-mod-php php-mysql php-pdo php-mbstring php-json 
-apt -y install php-opcache php-apcu php-imap php-curl
+sudo apt -y install apache2 mariadb-server 
+sudo apt -y install php libapache2-mod-php php-mysql php-pdo php-mbstring php-json 
+sudo apt -y install php-opcache php-apcu php-imap php-curl
 
 # Development stuff
-apt -y install git composer
+sudo apt -y install git composer
  
 # Dns utile, netstat
-apt -y install dnsutils tcpdump unbound
-
-# Zabezpiecz mysql
-sudo mysql_secure_installation
+sudo apt -y install dnsutils tcpdump unbound
 
 # Uruchom mysql
 sudo mariadb
@@ -23,20 +30,23 @@ sudo mariadb
 GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
-
 # Utwórz bazę danych
 CREATE DATABASE bdname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-# wyjście
+# Wyjście
 exit
 
-# uruchom mysql z hasłem
+# Zabezpiecz mysql z terminala
+sudo mysql_secure_installation
+
+# Uruchom mysql z hasłem (opcjonalnie)
 mariadb -u root -p
 ```
 
-### Utwórz folder na pliki stron www
+### Utwórz folder na pliki stron www (usero - nazwa Twojego usera)
+Defaultowo w apache2 to folder: /var/www/html
 ```bash
-mkdir /home/usero/Www
+mkdir -p /home/usero/Www/html
+mkdir -p /home/usero/Www/virtualhost
 ```
 
 ### Zmień
@@ -58,7 +68,7 @@ include /home/usero/Www/virtualhost/*.conf
 sudo nano /home/usero/Www/virtualhost/pages.conf
 ```bash
 <VirtualHost *:80>
-	ServerName localhost
+	ServerName _default_
 	ServerAdmin webmaster@localhost
 	DocumentRoot /home/usero/Www/html
 	LogLevel info ssl:warn
@@ -75,7 +85,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 <VirtualHost *:80>
         ServerName test.xx
     	ServerAlias www.test.xx
-        ServerAdmin webmaster@localhost
+        ServerAdmin webmaster@test.xx
         DocumentRoot /home/usero/Www/html/test
         LogLevel info ssl:warn
         ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -87,7 +97,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
             IndexIgnore *.sh *.htaccess
             AllowOverride All 
             Require all granted
-        </Directory>
+        </Directory>      
 </VirtualHost>
 
 # Host wirtualny dla strony z ssl/tls
@@ -95,7 +105,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
         <VirtualHost *:443>
                 ServerName test.xx
                 ServerAlias www.test.xx
-                ServerAdmin webmaster@localhost
+                ServerAdmin webmaster@test.xx
                 DocumentRoot /home/usero/Www/html/test
                 LogLevel info ssl:warn
                 ErrorLog ${APACHE_LOG_DIR}/error.log
@@ -122,7 +132,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 chown -R usero:www-data /home/usero/Www
 chmod -R 775 /home/usero/Www
 
-# Lub dodaj swojego użytkownika do grupy: www-data
+# Dodaj swojego użytkownika do grupy: www-data
 usermod -a -G www-data usero
 
 # Usuń usera z grupy
@@ -170,7 +180,7 @@ sudo nano /etc/hosts
 127.0.0.1 localhost test.xx www.test.xx your-domain.xx
 ```
 
-### Konfiguracja apache2 prefork (opcjonalnie)
+## Konfiguracja apache2 prefork (opcjonalnie)
 sudo nano /etc/apache2/mods-available/mpm_prefork.conf
 ```bash
 # prefork MPM
@@ -195,7 +205,55 @@ sudo a2dismod mpm_event
 sudo a2enmod mpm_prefork
 ```
 
-### Mysql table backup, restore
+## Apache2 php-fpm (opcjonalnie)
+Instalacja php-fpm dla serwera apache2
+```bash
+# Wyłącz
+sudo a2dismod php7.3
+
+# Zainstaluj
+sudo apt install php7.3-fpm
+
+# Konfiguracja
+sudo a2enmod proxy_fcgi setenvif
+sudo a2enconf php7.3-fpm
+
+# Run php-fpm
+sudo systemctl start php7.3-fpm
+sudo systemctl enable php7.3-fpm
+
+# Show status
+systemctl status php7.3-fpm
+
+# Restart servera
+sudo systemctl restart apache2
+
+# Show apache2 modules
+sudo apachectl -M
+```
+
+### Zmień Apache2 virtualhost dla php-fpm
+Dodaj do virtualhost każdej domeny
+```conf
+# Add to doamins virtualhost
+<IfModule mod_proxy_fcgi.c>
+    <FilesMatch "\.php$">
+        # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
+        # listen = 127.0.0.1:9000
+        # SetHandler "proxy:fcgi://127.0.0.1:9000/"
+        
+        # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
+        # listen = /run/php/php7.3-fpm.sock
+        SetHandler "proxy:unix:/run/php/php7.3-fpm.sock"
+
+        # Lub tak
+        # SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/"
+        # SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost/"
+    </FilesMatch>
+</IfModule>
+```
+
+## Mysql table backup, restore
 ```bash
 # Backup database
 mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
@@ -203,6 +261,9 @@ mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.s
 # Backup all databases
 mysqldump --all-databases -add-drop-database --single-transaction --quick --lock-tables=false > full-backup-$(date +%F).sql -hlocalhost -uroot -ptoor
 
-# Restore database
+# Restore single database
 mysql -hlocalhost -uroot -phaslo dbname < dbname-backup.sql
+
+# Restore All databases
+mysql -hlocalhost -uroot -phaslo < full-backup.sql
 ```
