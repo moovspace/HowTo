@@ -159,19 +159,28 @@ sudo systemctl status apache2
 
 ### Uruchom firewall
 ```bash
-# Instalacha
-apt -y install ufw
+# Instalacja
+sudo apt -y install ufw
+
+# Otwórz port: 22 ssh (tylko na vps na desktop pomiń)
+sudo ufw allow 22/tcp
 
 # Otwórz porty: 80, 443 (apache2 http, https)
-sudo ufw allow in "WWW Full"
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Blokada innych portów (Desktop, vps)
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
 # Włącz logi
 sudo ufw logging on
+
 # Uruchom na stałe
 sudo ufw enable
 
-# Lub
-sudo ufw allow www
-sudo ufw allow https
+# Status firewalla
+sudo ufw status
 ```
 
 ### Dla domen z lokalnego hosta dodaj
@@ -233,9 +242,10 @@ sudo apachectl -M
 ```
 
 ### Zmień Apache2 virtualhost dla php-fpm
-Dodaj do virtualhost każdej domeny
+sudo nano /home/usero/Www/virtualhost/pages.conf
 ```conf
-# Add to doamins virtualhost
+# Add to virtualhosts
+# Dodaj do virtualhosta każdej domeny
 <IfModule mod_proxy_fcgi.c>
     <FilesMatch "\.php$">
         # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
@@ -256,14 +266,14 @@ Dodaj do virtualhost każdej domeny
 ## Mysql table backup, restore
 ```bash
 # Backup database
-mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
+sudo mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
 
 # Backup all databases
-mysqldump --all-databases -add-drop-database --single-transaction --quick --lock-tables=false > full-backup-$(date +%F).sql -hlocalhost -uroot -ptoor
+sudo mysqldump --all-databases -add-drop-database --single-transaction --quick --lock-tables=false > full-backup-$(date +%F).sql -hlocalhost -uroot -ptoor
 
 # Restore single database
-mysql -hlocalhost -uroot -phaslo dbname < dbname-backup.sql
+sudo mysql -hlocalhost -uroot -phaslo dbname < dbname-backup.sql
 
 # Restore All databases
-mysql -hlocalhost -uroot -phaslo < full-backup.sql
+sudo mysql -hlocalhost -uroot -phaslo < full-backup.sql
 ```
