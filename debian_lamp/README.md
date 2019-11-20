@@ -268,6 +268,20 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 </IfModule>
 ```
 
+### Apache2 headers module
+```bash
+a2enmod headers
+
+# Virtualhost part
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "sameorigin"
+  Header always set X-Xss-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  RequestHeader unset Proxy early
+</IfModule>
+```
+
 ## Mysql table backup, restore
 ```bash
 # Backup database
