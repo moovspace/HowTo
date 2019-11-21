@@ -53,6 +53,10 @@ Defaultowo w apache2 to folder: /var/www/html
 mkdir -p /home/usero/Www/html
 mkdir -p /home/usero/Www/mysql
 mkdir -p /home/usero/Www/virtualhost
+
+# Access denied from browser
+echo "Require all denied" > /home/usero/Www/mysql/.htaccess
+echo "Require all denied" > /home/usero/Www/virtualhost/.htaccess
 ```
 
 ### Zmień
