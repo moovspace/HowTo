@@ -62,31 +62,24 @@ sudo nano /etc/apache2/mods-enabled/dir.conf
 </IfModule>
 ```
 
-### Dodaj virtualhosts
-sudo nano /etc/apache2/sites-available/000-default.conf
-```bash
-# Usuń wszystko z pliku i dodaj:
-include /home/usero/Www/virtualhost/*.conf
+### Dodaj virtualhosts z innej lokalizacji
+nano /etc/apache2/apache2.conf
+```bash 
+# Virtual hosts
+IncludeOptional /home/usero/Www/virtualhost/*.conf
+
+# Www directory
+<Directory /home/usero/Www/>
+        Options Indexes FollowSymLinks MultiViews
+        DirectoryIndex index.php index.html
+        AllowOverride All 
+        Require all granted
+</Directory>
 ```
 
 ### Przykład virtual hosts
 sudo nano /home/usero/Www/virtualhost/pages.conf
 ```bash
-<VirtualHost *:80>
-	ServerName _default_
-	ServerAdmin webmaster@localhost
-	DocumentRoot /home/usero/Www/html
-	LogLevel info ssl:warn
-	ErrorLog ${APACHE_LOG_DIR}/error.log
-	CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    <Directory /home/usero/Www/html>
-        Options Indexes FollowSymLinks MultiViews
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-
 <VirtualHost *:80>
         ServerName test.xx
     	ServerAlias www.test.xx
@@ -134,10 +127,10 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 
 ### Zmień uprawnienia i właściciela folderu
 ```bash
-chown -R usero:www-data /home/usero/Www
+chown -R www-data:usero /home/usero/Www
 chmod -R 775 /home/usero/Www
 
-# Dodaj swojego użytkownika do grupy: www-data
+# Lub dodaj swojego użytkownika do grupy: www-data
 usermod -a -G www-data usero
 
 # Usuń usera z grupy
@@ -250,23 +243,28 @@ sudo apachectl -M
 sudo nano /home/usero/Www/virtualhost/pages.conf
 ```conf
 # Add to virtualhosts
+<Proxy "fcgi://localhost:9000/" enablereuse=on max=10> 
+</Proxy>
+
 # Dodaj do virtualhosta każdej domeny
 <IfModule mod_proxy_fcgi.c>
-    <FilesMatch "\.php$">
-        # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
-        # listen = 127.0.0.1:9000
-        # SetHandler "proxy:fcgi://127.0.0.1:9000/"
-        
-        # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
-        # listen = /run/php/php7.3-fpm.sock
-        SetHandler "proxy:unix:/run/php/php7.3-fpm.sock"
+    # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
+    # listen = 127.0.0.1:9000
+    ## ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000/home/usero/Www/html/moov/$1
+    
+    # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
+    # listen = /run/php/php7.3-fpm.sock
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/moov/
+</IfModule mod_proxy_fcgi.c>
 
-        # Lub tak
-        # SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/"
-        # SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://localhost/"
+# Lub tak
+<IfModule mod_proxy_fcgi.c>
+    <FilesMatch "\.php$">
+        SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/moov/
     </FilesMatch>
 </IfModule>
 ```
+Po więcej: https://cwiki.apache.org/confluence/display/httpd/PHP-FPM
 
 ### Apache2 headers module
 ```bash
