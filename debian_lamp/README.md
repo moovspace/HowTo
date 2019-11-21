@@ -226,8 +226,8 @@ sudo a2enmod proxy_fcgi setenvif
 sudo a2enconf php7.3-fpm
 
 # Run php-fpm
-sudo systemctl start php7.3-fpm
 sudo systemctl enable php7.3-fpm
+sudo systemctl start php7.3-fpm
 
 # Show status
 systemctl status php7.3-fpm
