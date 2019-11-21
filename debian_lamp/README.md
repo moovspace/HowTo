@@ -129,6 +129,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
         </VirtualHost>
 </IfModule>
 ```
+Free: tls/ssl certificates: https://certbot.eff.org/lets-encrypt/debianbuster-apache.html
 
 ### Zmień uprawnienia i właściciela folderu
 ```bash
