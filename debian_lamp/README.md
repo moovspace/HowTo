@@ -266,13 +266,6 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
     # listen = /run/php/php7.3-fpm.sock
     ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/test/
 </IfModule mod_proxy_fcgi.c>
-
-# Lub tak
-<IfModule mod_proxy_fcgi.c>
-    <FilesMatch "\.php$">
-        SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/test/
-    </FilesMatch>
-</IfModule>
 ```
 Po więcej: https://cwiki.apache.org/confluence/display/httpd/PHP-FPM
 
