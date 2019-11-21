@@ -250,17 +250,17 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 <IfModule mod_proxy_fcgi.c>
     # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
     # listen = 127.0.0.1:9000
-    ## ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000/home/usero/Www/html/moov/$1
+    ## ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000/home/usero/Www/html/test/$1
     
     # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
     # listen = /run/php/php7.3-fpm.sock
-    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/moov/
+    ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/test/
 </IfModule mod_proxy_fcgi.c>
 
 # Lub tak
 <IfModule mod_proxy_fcgi.c>
     <FilesMatch "\.php$">
-        SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/moov/
+        SetHandler "proxy:unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/test/
     </FilesMatch>
 </IfModule>
 ```
