@@ -310,10 +310,10 @@ mkdir /home/usero/Backup
 cd /home/usero/Backup
 
 # Backup gzip
-tar -zcvf backup-1.tar.gz /home/usero/Www /etc
+tar -zcvf backup-1.tar.gz /home/usero/Www /etc/apache2
 
 # With ownership add -p
-tar -zcvfp backup-1.tar.gz /home/usero/Www /etc
+tar -zcvfp backup-1.tar.gz /home/usero/Www /etc/apache2
 
 # Restore backup
 sudo tar -xvpzf /path/to/backup.tar.gz -C /tmp/Www --numeric-owner
