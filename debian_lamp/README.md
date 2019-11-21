@@ -126,6 +126,10 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
                 <Directory /usr/lib/cgi-bin>
                                 SSLOptions +StdEnvVars
                 </Directory>
+
+                <IfModule mod_http2.c>
+		            Protocols h2 http/1.1
+	            </IfModule>
         </VirtualHost>
 </IfModule>
 ```
@@ -146,7 +150,7 @@ usermod -a -G www-data usero
 ### Włącz moduły
 ```bash
 # Apache2
-a2enmod rewrite ssl deflate headers
+a2enmod rewrite ssl deflate headers http2
 
 # Php
 phpenmod mbstring json pdo curl imap
@@ -272,17 +276,36 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
 ```
 Po więcej: https://cwiki.apache.org/confluence/display/httpd/PHP-FPM
 
-### Apache2 headers module
+### Apache2 headers, http2, ssl module
 ```bash
 a2enmod headers
 
-# Virtualhost part
+# <Virtualhost *.443> http2 protocol (only https)
+<IfModule mod_http2.c>
+    Protocols h2 http/1.1
+</IfModule>
+
+# Secure content
 <IfModule mod_headers.c>
-  Header always set X-Content-Type-Options "nosniff"
-  Header always set X-Frame-Options "sameorigin"
-  Header always set X-Xss-Protection "1; mode=block"
-  Header always set Referrer-Policy "strict-origin-when-cross-origin"
-  RequestHeader unset Proxy early
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "sameorigin"
+    Header always set X-Xss-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    RequestHeader unset Proxy early
+</IfModule>
+
+# Ssl/Tls certs
+<IfModule mod_ssl.c>
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+    SSLHonorCipherOrder on
+    SSLCompression off
+    SSLUseStapling on
+    SSLStaplingResponderTimeout 5
+    SSLStaplingReturnResponderErrors off
+    SSLStaplingCache shmcb:${APACHE_RUN_DIR}/ocsp_scache(128000)
+    SSLSessionCache shmcb:${APACHE_RUN_DIR}/ssl_scache(512000)
+    SSLSessionCacheTimeout 300
 </IfModule>
 ```
 
