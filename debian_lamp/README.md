@@ -283,10 +283,10 @@ a2enmod headers
 ## Mysql table backup, restore
 ```bash
 # Create folder
-mkdir /home/usero/Mysql
+mkdir /home/usero/Www/mysql
 
 # Idź do 
-cd /home/usero/Mysql
+cd /home/usero/Www/mysql
 
 # Backup database
 sudo mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
@@ -310,13 +310,13 @@ mkdir /home/usero/Backup
 cd /home/usero/Backup
 
 # Backup gzip
-tar -zcvf backup-1.tar.gz /home/usero/Www /home/usero/Mysql /etc
+tar -zcvf backup-1.tar.gz /home/usero/Www /etc
 
 # With ownership add -p
-tar -zcvfp backup-1.tar.gz /home/usero/Www /home/usero/Mysql /etc
+tar -zcvfp backup-1.tar.gz /home/usero/Www /etc
 
 # Restore backup
-sudo tar -xvpzf /path/to/backup.tar.gz -C /media/whatever --numeric-owner
+sudo tar -xvpzf /path/to/backup.tar.gz -C /tmp/Www --numeric-owner
 
 ## Remove folder sample
 rm -rf /tmp/dir
