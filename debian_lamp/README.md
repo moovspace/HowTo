@@ -51,6 +51,7 @@ mariadb -u root -p
 Defaultowo w apache2 to folder: /var/www/html
 ```bash
 mkdir -p /home/usero/Www/html
+mkdir -p /home/usero/Www/mysql
 mkdir -p /home/usero/Www/virtualhost
 ```
 
