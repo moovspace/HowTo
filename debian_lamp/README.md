@@ -282,6 +282,12 @@ a2enmod headers
 
 ## Mysql table backup, restore
 ```bash
+# Create folder
+mkdir /home/usero/Mysql
+
+# Idź do 
+cd /home/usero/Mysql
+
 # Backup database
 sudo mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
 
@@ -294,3 +300,25 @@ sudo mysql -hlocalhost -uroot -phaslo dbname < dbname-backup.sql
 # Restore All databases
 sudo mysql -hlocalhost -uroot -phaslo < full-backup.sql
 ```
+
+## Tar backup Www, mysql, Apache folders
+```bash
+# Create folder
+mkdir /home/usero/Backup
+
+# Idź do 
+cd /home/usero/Backup
+
+# Backup gzip
+tar -zcvf backup-1.tar.gz /home/usero/Www /home/usero/Mysql /etc
+
+# With ownership add -p
+tar -zcvfp backup-1.tar.gz /home/usero/Www /home/usero/Mysql /etc
+
+# Restore backup
+sudo tar -xvpzf /path/to/backup.tar.gz -C /media/whatever --numeric-owner
+
+## Remove folder sample
+rm -rf /tmp/dir
+```
+Po więcej: https://help.ubuntu.com/community/BackupYourSystem/TAR
