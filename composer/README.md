@@ -74,6 +74,9 @@ class CreateUser
 #### Wczytaj klasy
 ```php
 <?php
+// Dołącz composer autoload
+require('vendor/autoload.php');
+
 use YourNamespace\PackageName\Login\User;
 use YourNamespace\PackageName\Register\CreateUser;
 
