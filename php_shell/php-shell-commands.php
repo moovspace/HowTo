@@ -8,12 +8,17 @@ foreach($argv as $a){
     echo "Arg : " . $a . "\r\n";
 }
 
+// Różnice
+// shel_exec - zwraca cały output
+// exec - zwraca ostatnia linję output chyba że dodany drugi parametr: exec('ls', $out);
+
 // Uruchom skrypt z argumentami z php
 $out = shell_exec('/tmp/myscript.php '.escapeshellarg($my_url).' '.escapeshellarg($my_refer));
 $out = shell_exec('/tmp/myscript.php '.escapeshellarg($my_url).' '.escapeshellarg($my_refer));
 $out = shell_exec(sprintf('/tmp/my_script.php "%s" "%s"', $my_url, $my_refer));
 
 // exec
+exec('ls', $out);
 $out = exec("php /var/www/unity/src/emailer.php 123");
 $out = exec("/usr/bin/php -f {$fileName} {$options} > /var/www/ztest/log01.txt 2>&1 &");
 
