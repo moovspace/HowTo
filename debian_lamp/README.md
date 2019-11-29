@@ -35,8 +35,10 @@ sudo mariadb
 GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
+
 # Utwórz bazę danych
 CREATE DATABASE bdname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 # Wyjście
 exit
 
@@ -46,6 +48,15 @@ sudo mysql_secure_installation
 # Uruchom mysql z hasłem (opcjonalnie)
 mysql -u root -p
 mariadb -u root -p
+
+# Change privileges sample
+# REVOKE ALL ON 'dbname'.'table' FROM 'user'@'host';
+
+# Delete user sample
+# DROP USER 'user'@'host';
+
+# Set password
+# SET PASSWORD FOR 'user'@'host' = PASSWORD('pass');
 ```
 
 ### Utwórz folder na pliki stron www (usero - nazwa Twojego usera)
@@ -353,6 +364,9 @@ SELECT SQL_NO_CACHE * FROM TABLE
 
 ## Mysql table backup, restore
 ```bash
+# Allow big .sql backup files
+mysql> SET GLOBAL max_allowed_packet = 1000000000
+
 # Create folder
 mkdir /home/usero/Www/mysql
 
