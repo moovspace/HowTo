@@ -36,8 +36,11 @@ GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 GRANT ALL ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'toor' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
+# Pokaż uprawnienia
+SHOW GRANTS FOR 'root'@'localhost';
+
 # Utwórz bazę danych
-CREATE DATABASE bdname CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE db_name CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 # Wyjście
 exit
@@ -49,13 +52,11 @@ sudo mysql_secure_installation
 mysql -u root -p
 mariadb -u root -p
 
-# Change privileges sample
+# Przykład zmiana uprawnień
 # REVOKE ALL ON 'dbname'.'table' FROM 'user'@'host';
-
-# Delete user sample
+# Usuwanie usera
 # DROP USER 'user'@'host';
-
-# Set password
+# Zmiana hasła
 # SET PASSWORD FOR 'user'@'host' = PASSWORD('pass');
 ```
 
@@ -328,8 +329,10 @@ character-set-client-handshake = FALSE
 character-set-server = utf8mb4
 collation-server = utf8mb4_unicode_ci
 
-# Show settings 
+# Pokaż ustawienia
 # mysql> SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';
+
+# Napraw
 # mysqlcheck -u root -p --auto-repair --optimize --all-databases
 ```
 
@@ -337,43 +340,43 @@ collation-server = utf8mb4_unicode_ci
 ```bash
 mysql> SHOW VARIABLES LIKE '%cache%';
 
-# If cache option exists
+# Gdy cache dostępny
 have_query_cache = true
 
-# Cache size
+# Rozmiar cache
 query_cache_size = 268435456
 
-# Single query size limit
+# Limit wielkości zapytania
 query_cache_limit = 1048576
 
-# Enable cahce
+# Włącz cache
 query_cache_type = 1
 
-# Disable cache
-SET SESSION query_cache_type=0;
+# Wyłącz cache
+SET SESSION query_cache_type = 0;
 
-# Or globaly
+# Globalnie
 SET GLOBAL query_cache_size = 0
 
-# Or for current session
+# Dla bieżącej sesji
 SET SESSION query_cache_size = 0
 
-# Or in query
+# W zapytaniu
 SELECT SQL_NO_CACHE * FROM TABLE
 ```
 
 ## Mysql table backup, restore
 ```bash
-# Allow big .sql backup files
-mysql> SET GLOBAL max_allowed_packet = 1000000000
+# Import dużych plików .sql
+SET GLOBAL max_allowed_packet = 1000000000
 
-# Create folder
+# Utwórz folder
 mkdir /home/usero/Www/mysql
 
 # Idź do 
 cd /home/usero/Www/mysql
 
-# Backup database
+# Backup bazy danych
 sudo mysqldump --add-drop-database --add-locks --databases dbname1 dbname2 > backup.sql
 sudo mysqldump --add-drop-database --add-locks --all-databases > all-backup.sql
 
@@ -396,7 +399,7 @@ sudo mysql -hlocalhost -uroot -phaslo < full-backup.sql
 
 ## Tar backup Www, mysql, Apache folders
 ```bash
-# Create folder
+# Utwórz folder
 mkdir /home/usero/Backup
 
 # Idź do 
@@ -405,7 +408,7 @@ cd /home/usero/Backup
 # Backup gzip
 tar -zcvf backup-1.tar.gz /home/usero/Www /etc/apache2
 
-# With ownership add -p
+# With ownership add -p (z uprawniwniami na folderach)
 tar -zcvfp backup-1.tar.gz /home/usero/Www /etc/apache2
 
 # Restore backup
