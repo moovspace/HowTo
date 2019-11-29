@@ -44,6 +44,7 @@ exit
 sudo mysql_secure_installation
 
 # Uruchom mysql z hasłem (opcjonalnie)
+mysql -u root -p
 mariadb -u root -p
 ```
 
