@@ -302,6 +302,54 @@ a2enmod headers
 </IfModule>
 ```
 
+## Mysql config file my.cnf
+nano /etc/mysql/my.cnf
+```bash
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+# Show settings 
+# mysql> SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';
+# mysqlcheck -u root -p --auto-repair --optimize --all-databases
+```
+
+## Mysql cache
+```bash
+mysql> SHOW VARIABLES LIKE '%cache%';
+
+# If cache option exists
+have_query_cache = true
+
+# Cache size
+query_cache_size = 268435456
+
+# Single query size limit
+query_cache_limit = 1048576
+
+# Enable cahce
+query_cache_type = 1
+
+# Disable cache
+SET SESSION query_cache_type=0;
+
+# Or globaly
+SET GLOBAL query_cache_size = 0
+
+# Or for current session
+SET SESSION query_cache_size = 0
+
+# Or in query
+SELECT SQL_NO_CACHE * FROM TABLE
+```
+
 ## Mysql table backup, restore
 ```bash
 # Create folder
@@ -311,6 +359,14 @@ mkdir /home/usero/Www/mysql
 cd /home/usero/Www/mysql
 
 # Backup database
+sudo mysqldump --add-drop-database --add-locks --databases dbname1 dbname2 > backup.sql
+sudo mysqldump --add-drop-database --add-locks --all-databases > all-backup.sql
+
+# With password
+sudo mysqldump -u root -p --add-drop-database --add-locks --databases dbname1 dbname2 > backup.sql
+sudo mysqldump -u root -p --add-drop-database --add-locks --all-databases > all-backup.sql
+
+# With hosts and pass
 sudo mysqldump --add-drop-database -hlocalhost -uroot -ptoor dbname > dbname-backup.sql
 
 # Backup all databases
