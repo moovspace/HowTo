@@ -314,6 +314,11 @@ a2enmod headers
     SSLSessionCacheTimeout 300
 </IfModule>
 ```
+### Mysql tuning
+```bash
+sudo apt install mysqltuner
+sudo mysqltuner --user root --pass toor
+```
 
 ## Mysql config file my.cnf
 nano /etc/mysql/my.cnf
@@ -329,8 +334,34 @@ character-set-client-handshake = FALSE
 character-set-server = utf8mb4
 collation-server = utf8mb4_unicode_ci
 
+# Max mysql connection limit
+max_connections = 2000
+
+# Max import file size
+max_allowed_packet = 1000000000
+
+# Separate thread for connection
+thread_cache_size=4
+
+# Innodb
+innodb_log_file_size=32M
+innodb_buffer_pool_size=256M
+
+# Dns
+skip-name-resolve=1
+performance_schema = ON
+
+# Disable cache
+query_cache_size=0
+query_cache_type=0
+query_cache_limit=1M
+
+
 # Pokaż ustawienia
 # mysql> SHOW VARIABLES WHERE Variable_name LIKE 'character\_set\_%' OR Variable_name LIKE 'collation%';
+
+# Zmień ustawienia
+# mysql> SET GLOBAL max_connections=2000;
 
 # Napraw
 # mysqlcheck -u root -p --auto-repair --optimize --all-databases
