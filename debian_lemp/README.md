@@ -20,6 +20,11 @@ netstat -an | grep :80 | grep -v TIME_WAIT | wc -l
 
 # Live
 watch -d -n0 "netstat -atnp | grep ESTA"
+
+# Dump tcp: https://danielmiessler.com/study/tcpdump
+sudo tcpdump -nnSX port 443
+sudo tcpdump -i eth0
+sudo tcpdump host 1.1.1.1
 ```
 
 ### System info
