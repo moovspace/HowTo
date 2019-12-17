@@ -1,5 +1,12 @@
 # Nginx server virtualhosts
 
+### Aktywne połączenia 
+```bash
+netstat -an | grep :80 | wc -l
+netstat -an | grep :80 | grep ESTABLISHED | wc -l
+netstat -an | grep :80 | grep -v TIME_WAIT | wc -l
+```
+
 ### Konfiguracja
 sudo nano /etc/nginx/nginx.conf
 ```bash
@@ -138,6 +145,25 @@ sudo sysctl -w net.core.somaxconn=4096
 server {
     listen 80 backlog=4096;    
 }
+```
+
+### Nginx stats
+nano /etc/nginx.conf
+```bash
+location /nginx_status {
+    # Turn on stats
+    stub_status on;
+    access_log   off;
+    # only allow access from ip
+    allow 127.0.0.1;
+    deny all;
+}
+
+# Restart
+# sudo services nginx restart
+
+# Show
+# http://ip.address.here/nginx_status
 ```
 
 ### System tuning 
