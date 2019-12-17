@@ -2,7 +2,7 @@
 
 ### Konfiguracja
 sudo nano /etc/nginx/nginx.conf
-```conf
+```bash
 # Procesor:
 # grep processor /proc/cpuinfo | wc -l
 worker_processes 1;
