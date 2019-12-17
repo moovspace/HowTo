@@ -1,4 +1,15 @@
-# Nginx server virtualhosts
+# Nginx web server
+
+### Connection testing tools (n – uruchom n razy, c – jednoczesna ilość żądań): 
+ab -n 1000 -c 50 http://domain.xx
+```bash
+sudo apt-get install apache2-utils
+```
+
+### Instalacja
+```bash
+sudo apt-get install nginx
+```
 
 ### Aktywne połączenia 
 ```bash
@@ -11,19 +22,70 @@ netstat -an | grep :80 | grep -v TIME_WAIT | wc -l
 watch -d -n0 "netstat -atnp | grep ESTA"
 ```
 
+### System info
+```bash
+# System ustawienia: /etc/sysctl.conf
+sudo sysctl -p
+
+# Zmień ustawienia
+sudo sysctl -w fs.file-max=2000000
+
+# Liczba procesorów
+grep processor /proc/cpuinfo | wc -l
+
+# Limity połaczeń
+ulimit -H -a
+ulimit -n
+```
+
+### Linux tuning:
+sudo nano nano /etc/sysctl.conf
+```bash
+net.core.somaxconn = 4096
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_max_syn_backlog = 4096
+net.ipv4.ip_local_port_range = 1024 65535
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_max_orphans = 262144
+# Max files limit
+fs.file-max = 2000000
+
+# Testuj
+# sudo sysctl -p
+```
+
 ### Konfiguracja
 sudo nano /etc/nginx/nginx.conf
 ```bash
-# Procesor:
-# grep processor /proc/cpuinfo | wc -l
-worker_processes 1;
-
-# Connection limit
-# ulimit -n
+worker_processes auto; 
 worker_connections 1024;
 
-# Timeout
-keepalive_timeout 70;
+# Events
+events {    
+    use epoll;
+    epoll_events 4096;
+    worker_connections 1024;
+    multi_accept on;
+    accept_mutex off;   
+}
+
+http {
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+}
+
+# Cache files
+open_file_cache max=1000 inactive=20s;
+open_file_cache_valid 30s;
+open_file_cache_min_uses 2;
+open_file_cache_errors on;
+
+# Connections
+keepalive_timeout 15;
+keepalive_requests 100;
 
 # Limits
 # Max upload file size
@@ -38,14 +100,10 @@ client_body_timeout 15;
 client_header_timeout 15;
 send_timeout 10;
 
-# Connections
-keepalive_timeout 15;
-keepalive_requests 100;
-
 # Gzip
 gzip             on;
 gzip_comp_level  6;
-gzip_min_length  1000;
+gzip_min_length  100;
 gzip_proxied     expired no-cache no-store private auth;
 gzip_types       text/plain application/x-javascript text/xml text/css application/xml;
 gzip_types       text/plain text/css application/x-javascript text/xml application/json application/xml application/xml+rss text/javascript;
@@ -58,15 +116,6 @@ location / {
 # Errors
 error_page 404             /404.html;
 error_page 500 502 503 504 /50x.html;
-
-# Events
-events {
-    worker_connections 51200;
-    use epoll;
-    epoll_events 4096;
-    multi_accept on;
-    accept_mutex off;   
-}
 
 # Limit rate for files
 location ~ \.flv$ {
@@ -164,14 +213,14 @@ server {
 ### Nginx stats
 nano /etc/nginx.conf
 ```bash
-location /nginx_status {
-    # Turn on stats
-    stub_status on;
-    access_log   off;
-    # only allow access from ip
-    allow 127.0.0.1;
-    deny all;
-}
+    location /nginx_status {
+        # Turn on stats
+        stub_status on;
+        access_log   off;
+        # only allow access from ip
+        allow 127.0.0.1;
+        deny all;
+    }
 
 # Restart
 # sudo services nginx restart
@@ -180,25 +229,6 @@ location /nginx_status {
 # http://ip.address.here/nginx_status
 ```
 
-### System tuning 
-nano /etc/sysctl.conf
-```bash
-# NGINX
-net.ipv4.ip_local_port_range = 1024 65535
-net.core.rmem_max = 16777216
-net.core.wmem_max = 16777216
-net.ipv4.tcp_max_syn_backlog = 4096
-net.ipv4.tcp_syncookies = 1
-net.core.somaxconn = 4096
-fs.file-max = 200000
-
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_max_orphans = 262144
-
-# Test with
-# sysctl -w fs.file-max=200000
-# sudo sysctl -p
-```
 - https://docs.nginx.com/nginx/admin-guide/security-controls/securing-http-traffic-upstream/
 - https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/
 - https://docs.nginx.com/nginx/admin-guide/security-controls/terminating-ssl-http/#
