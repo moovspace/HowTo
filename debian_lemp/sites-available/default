@@ -86,9 +86,13 @@ server {
     # Self-signed certs
     # include snippets/snakeoil.conf
 
-    location = / {
+    # location = / {
         # proxy_pass http://upstream;
         # http2_push_preload on;
         # keepalive_timeout 70;
-    }
+
+        # proxy_pass http://localhost:8000;
+        # proxy_set_header Host $host;
+        # proxy_set_header X-Real-IP $remote_addr;
+    # }
 }
