@@ -2,9 +2,13 @@
 
 ### Aktywne połączenia 
 ```bash
+# Aktywne
 netstat -an | grep :80 | wc -l
 netstat -an | grep :80 | grep ESTABLISHED | wc -l
 netstat -an | grep :80 | grep -v TIME_WAIT | wc -l
+
+# Live
+watch -d -n0 "netstat -atnp | grep ESTA"
 ```
 
 ### Konfiguracja
@@ -44,6 +48,7 @@ gzip_comp_level  6;
 gzip_min_length  1000;
 gzip_proxied     expired no-cache no-store private auth;
 gzip_types       text/plain application/x-javascript text/xml text/css application/xml;
+gzip_types       text/plain text/css application/x-javascript text/xml application/json application/xml application/xml+rss text/javascript;
 
 # Compress
 location / {
@@ -53,6 +58,15 @@ location / {
 # Errors
 error_page 404             /404.html;
 error_page 500 502 503 504 /50x.html;
+
+# Events
+events {
+    worker_connections 51200;
+    use epoll;
+    epoll_events 4096;
+    multi_accept on;
+    accept_mutex off;   
+}
 
 # Limit rate for files
 location ~ \.flv$ {
