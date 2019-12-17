@@ -162,6 +162,7 @@ net.ipv4.tcp_max_orphans = 262144
 - https://docs.nginx.com/nginx/admin-guide/security-controls/securing-http-traffic-upstream/
 - https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/
 - https://docs.nginx.com/nginx/admin-guide/security-controls/terminating-ssl-http/#
+- https://www.digitalocean.com/community/tutorials/understanding-nginx-http-proxying-load-balancing-buffering-and-caching
 - https://wiki.debian.org/Limits
 - http://www.tweaked.io/guide/kernel
 - https://easyengine.io/tutorials/linux/sysctl-conf
