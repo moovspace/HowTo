@@ -1,0 +1,82 @@
+http {
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        server_name _;
+        return 301 https://$host$request_uri;
+    }
+
+    server {
+        listen 443 ssl http2;
+        listen [::]:443 ssl http2;
+        server_name    domain.xx;        
+        
+        # Document root        
+        root /var/www/html; 
+        index index.php index.html;
+        
+        # Max upload size
+        client_max_body_size 20M;
+        
+        # Logs
+        access_log   /var/log/nginx/domain.xx.log;
+        error_log    /var/log/nginx/domain.xx.log error;
+        
+        # Self-signed certs
+        include /etc/nginx/snippets/snakeoil.conf
+
+        # Commercial, letsencrypt
+        # ssl_certificate_key /etc/nginx/ssl/domain.xx.key;
+        # ssl_certificate     /etc/nginx/ssl/domain.xx.pem;
+
+        # Redirect all to router
+        location / {
+            # Http2 auto push
+            http2_push_preload on;
+            
+            # Rewrite url to router.php param
+            # rewrite ^(.*)$ /router.php?url=$1 last;
+            # try_files $uri $uri/ /router.php?url=$uri&$args;
+
+	        # Rewrite if not exists
+	        # try_files $uri $uri/ /index.php$is_args$args;
+            # try_files $uri $uri/ @missing;
+        }
+        
+        # Missing files
+        location @missing {
+            rewrite ^ $scheme://$host/index.php$is_args$args;
+        } 
+        
+        # Php files
+        location ~ \.php$ {
+            # Args, paths
+            include snippets/fastcgi-php.conf;
+
+            # Unix socket
+            fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+
+            # Tcp sockets
+            # fastcgi_pass 127.0.0.1:9000;
+        }
+        
+        # Media
+        location /media/ {
+            # Show file list
+            autoindex on;
+
+            # Default image error
+            try_files $uri /media/default.gif;
+        }
+        
+        # Redirect to image server
+        location /images/ {
+            try_files $uri $uri/ @images;
+        }
+
+        location @images {
+            proxy_pass https://images.example.com;
+            # proxy_pass https://images.$host$request_uri;
+        }
+    }
+}

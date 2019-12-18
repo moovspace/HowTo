@@ -1,11 +1,20 @@
 # Servers list
 upstream backend {
-	# ip_hash;
-	server 127.0.0.1:9999;
-	server 127.0.0.1:8888;
+        # Connection min count
+        # least_conn
+
+        # Session enable
+        # ip_hash;
+
+        # Servers list
+        server 127.0.0.1:9999 max_conns=100;
+        server 127.0.0.1:8888 max_conns=100;
+        
+        # Wait in queue max 5s for connection
+        queue 200 timeout=5s;
 }
 
-# Load Balancer
+# Load Balancer Server
 server {
         listen 8080;
         listen [::]:8080;
@@ -14,20 +23,54 @@ server {
         index index.php index.html;
 
         location / {
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Original-URI $request_uri;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Connection "";
-            proxy_set_header Accept-Encoding "";
-            proxy_http_version 1.1;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Original-URI $request_uri;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Connection "";
+                proxy_set_header Accept-Encoding "";
+                proxy_http_version 1.1;
 
-            # Send to servers with query strings params
-            proxy_pass http://backend/$uri$is_args$args;
+                # Send to servers with query strings params
+                proxy_pass http://backend/$uri$is_args$args;
         }
         
         location ~ /\.ht {
                 deny all;
         }
 }
+
+# Php Proxy server
+server {
+        listen 9999;
+        server_name localhost;
+        root /var/www/html;
+        index index.php;
+
+        location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+               fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+               # With php-cgi (or other tcp sockets):
+               # fastcgi_pass 127.0.0.1:9000;
+        }
+}
+
+# Php Proxy server
+server {
+        listen 8888;
+        server_name localhost;
+        root /var/www/html;
+        index index.php;
+
+        location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+               fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+               # With php-cgi (or other tcp sockets):
+               # fastcgi_pass 127.0.0.1:9000;
+        }
+}
+
+# index.php file content
+# nano /var/www/html/index.php
+# <?php echo "<pre>"; print_r($_SERVER); print_r($_GET); print_r($_POST); ?>

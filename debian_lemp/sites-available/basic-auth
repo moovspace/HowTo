@@ -1,0 +1,35 @@
+# Create user password from terminal
+# sudo htpasswd -c /etc/nginx/.htpasswd user1
+
+http {
+    server {
+        listen  127.0.0.1:8001;
+        root    /var/www/html;
+        server_name _;
+
+        # Secure connection
+        location /admin {
+            # With conditions (all|any)
+            satisfy all;
+            
+            # Allow, deny ip
+            deny  1.1.1.1;
+            allow 127.0.0.1/24;
+            allow 127.0.0.1;
+            deny  all;
+
+            # Authentication
+            auth_basic "Restricted Area";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+            
+            # Php fpm
+            include snippets/fastcgi-php.conf;           
+            fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+
+            # Public folder
+            location /public/ {
+                auth_basic off;
+            }
+        }
+    }
+}
