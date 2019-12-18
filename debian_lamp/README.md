@@ -323,12 +323,19 @@ a2enmod headers
 # sudo a2enmod lbmethod_byrequests
 # sudo a2enmod headers
 
-# Add to VirtualHost
 ProxyPreserveHost On
 <Proxy balancer://mycluster>
     BalancerMember http://127.0.0.1:8888
     BalancerMember http://127.0.0.1:9999
+    ProxySet lbmethod=byrequests
 </Proxy>
+# Stats 
+<Location /balancer-manager>
+SetHandler balancer-manager
+Require all granted
+</Location>
+ProxyPass /balancer-manager !
+
 # Balancer proxy
 ProxyPass / balancer://mycluster/
 ProxyPassReverse / balancer://mycluster/
