@@ -314,6 +314,41 @@ a2enmod headers
     SSLSessionCacheTimeout 300
 </IfModule>
 ```
+
+### Apache2 Load balancer
+```bash
+# sudo a2enmod proxy
+# sudo a2enmod proxy_http
+# sudo a2enmod proxy_balancer
+# sudo a2enmod lbmethod_byrequests
+# sudo a2enmod headers
+
+# Add to VirtualHost
+ProxyPreserveHost On
+<Proxy balancer://mycluster>
+    BalancerMember http://127.0.0.1:8888
+    BalancerMember http://127.0.0.1:9999
+</Proxy>
+# Balancer proxy
+ProxyPass / balancer://mycluster/
+ProxyPassReverse / balancer://mycluster/
+
+# Single proxy
+# ProxyPass / http://127.0.0.1:8888/
+# ProxyPassReverse / http://127.0.0.1:9999/
+
+### Proxy with session id mod_headers
+# Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+# <Proxy "balancer://mycluster">
+#    BalancerMember "http://192.168.1.50:80" route=1
+#    BalancerMember "http://192.168.1.51:80" route=2
+#    ProxySet stickysession=ROUTEID
+# </Proxy>
+# ProxyPass        "/test" "balancer://mycluster"
+# ProxyPassReverse "/test" "balancer://mycluster"
+```
+
+
 ### Mysql tuning
 ```bash
 sudo apt install mysqltuner
