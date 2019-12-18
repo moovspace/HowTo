@@ -7,11 +7,11 @@ server {
 	index index.php index.html;
 
 	location / {
-        # Rewrite to https
+        # Rewrite https
         return 301 https://$host$request_uri;
-        # return 301 https://$host:4444$request_uri;
+        # return 301 https://$host:4443$request_uri;
 	}
-    
+
 	location ~ \.php$ {
         include snippets/fastcgi-php.conf;
         fastcgi_pass unix:/run/php/php7.3-fpm.sock;
@@ -173,9 +173,69 @@ upstream backend {
     # queue 100 timeout=70; # Ngin Plus only
 }
 
+upstream backend-loop-1 {
+    least_conn;
+	# ip_hash;
+	server 127.0.0.1:9001 max_conns=100;
+	server 127.0.0.1:9002 max_conns=100;
+    # queue 100 timeout=70; # Ngin Plus only
+}
+
+upstream backend-loop-2 {
+    least_conn;
+	# ip_hash;
+	server 127.0.0.1:9003 max_conns=100;
+	server 127.0.0.1:9004 max_conns=100;
+    # queue 100 timeout=70; # Ngin Plus only
+}
+
 # Proxy server
 server {
 	listen 9999;
+	server_name _;
+
+	root /home/usero/Www/html/nginx;
+	index index.php index.html;
+    
+    location / {
+        # try_files $uri $uri/ /index.php$is_args$args;
+        # With load balancer
+        proxy_pass http://backend-loop-1;
+    }
+
+	location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+
+        # With php-cgi (or other tcp sockets):
+        # fastcgi_pass 127.0.0.1:9000;
+    }
+}
+
+server {
+    listen 8888;
+    server_name _;
+    root /home/usero/Www/html/nginx;
+    index index.php index.html;
+
+    location / {
+       # try_files $uri $uri/ /index.php$is_args$args;
+       # With load balancer
+       proxy_pass http://backend-loop-2;
+    }
+
+    location ~ \.php$ {
+       include snippets/fastcgi-php.conf;
+       fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+
+       # With php-cgi (or other tcp sockets):
+       # fastcgi_pass 127.0.0.1:9000;
+    }
+}
+
+# Proxy server
+server {
+	listen 9001;
 	server_name _;
 
 	root /home/usero/Www/html/nginx;
@@ -195,7 +255,47 @@ server {
 }
 
 server {
-    listen 8888;
+    listen 9002;
+    server_name _;
+    root /home/usero/Www/html/nginx;
+    index index.php index.html;
+
+    location / {
+       try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+       include snippets/fastcgi-php.conf;
+       fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+
+       # With php-cgi (or other tcp sockets):
+       # fastcgi_pass 127.0.0.1:9000;
+    }
+}
+
+# Proxy server
+server {
+	listen 9003;
+	server_name _;
+
+	root /home/usero/Www/html/nginx;
+	index index.php index.html;
+    
+    location / {
+	   try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+	location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+
+        # With php-cgi (or other tcp sockets):
+        # fastcgi_pass 127.0.0.1:9000;
+    }
+}
+
+server {
+    listen 9004;
     server_name _;
     root /home/usero/Www/html/nginx;
     index index.php index.html;
