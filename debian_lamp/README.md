@@ -324,25 +324,13 @@ a2enmod headers
 # sudo a2enmod headers
 
 ProxyPreserveHost On
+
+### Proxy
 <Proxy balancer://mycluster>
     BalancerMember http://127.0.0.1:8888
     BalancerMember http://127.0.0.1:9999
     ProxySet lbmethod=byrequests
 </Proxy>
-# Stats 
-<Location /balancer-manager>
-SetHandler balancer-manager
-Require all granted
-</Location>
-ProxyPass /balancer-manager !
-
-# Balancer proxy
-ProxyPass / balancer://mycluster/
-ProxyPassReverse / balancer://mycluster/
-
-# Single proxy
-# ProxyPass / http://127.0.0.1:8888/
-# ProxyPassReverse / http://127.0.0.1:9999/
 
 ### Proxy with session id mod_headers
 # Header add Set-Cookie "ROUTEID=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
@@ -351,10 +339,47 @@ ProxyPassReverse / balancer://mycluster/
 #    BalancerMember "http://192.168.1.51:80" route=2
 #    ProxySet stickysession=ROUTEID
 # </Proxy>
-# ProxyPass        "/test" "balancer://mycluster"
-# ProxyPassReverse "/test" "balancer://mycluster"
+
+# Single proxy
+# ProxyPass / http://127.0.0.1:8888/
+# ProxyPassReverse / http://127.0.0.1:9999/
+
+# Stats 
+<Location /balancer-manager>
+    SetHandler balancer-manager
+    Require all granted
+</Location>
+
+ProxyPass /balancer-manager !
+ProxyPass / balancer://mycluster/
+ProxyPassReverse / balancer://mycluster/
 ```
 
+### HaProxy load balancer
+sudo nano /etc/haproxy/haproxy.cfg
+```bash
+frontend http_front
+   bind *:81
+   maxconn 40000
+   option http-keep-alive
+   option forwardfor
+   stats uri /haproxy?stats
+   default_backend http_back
+   acl url_blog path_beg /blog
+   use_backend blog_back if url_blog
+
+backend http_back
+        # balance source
+        # hash-type consistent # optional
+        balance roundrobin
+        cookie SERVERID insert indirect nocache
+        cookie PHPSESSIONID prefix nocache
+        server serv1 127.0.0.1:8888 check cookie serv1
+        server serv2 127.0.0.1:9999 check cookie serv2
+
+backend blog_back
+   server serv1 127.0.0.1:8888 check cookie serv1
+```
 
 ### Mysql tuning
 ```bash
