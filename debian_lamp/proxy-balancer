@@ -1,0 +1,40 @@
+## Add in VirtualHost with
+# include /path/to/proxy-balancer
+
+## Enable modules
+# sudo a2enmod proxy
+# sudo a2enmod proxy_http
+# sudo a2enmod proxy_balancer
+# sudo a2enmod lbmethod_byrequests
+# sudo a2enmod headers
+
+ProxyPreserveHost On
+
+### Proxy
+<Proxy balancer://mycluster>
+    BalancerMember http://127.0.0.1:8888
+    BalancerMember http://127.0.0.1:9999
+    ProxySet lbmethod=byrequests
+</Proxy>
+
+### Proxy with session id mod_headers
+Header add Set-Cookie "ROUTEPATH=.%{BALANCER_WORKER_ROUTE}e; path=/" env=BALANCER_ROUTE_CHANGED
+<Proxy balancer://cluster>
+    BalancerMember http://127.0.0.1:8888 route=1
+    BalancerMember http://127.0.0.1:9999 route=2
+    ProxySet stickysession=ROUTEPATH
+</Proxy>
+
+### Single proxy
+# ProxyPass / http://127.0.0.1:8888/
+# ProxyPassReverse / http://127.0.0.1:9999/
+
+# Balancer proxy
+ProxyPass /balancer-manager !
+ProxyPass / balancer://mycluster/
+ProxyPassReverse / balancer://mycluster/
+
+<Location /balancer-manager>
+SetHandler balancer-manager
+Require all granted
+</Location>

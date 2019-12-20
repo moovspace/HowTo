@@ -316,6 +316,7 @@ a2enmod headers
 ```
 
 ### Apache2 Load balancer
+Include in VirtualHost
 ```bash
 # sudo a2enmod proxy
 # sudo a2enmod proxy_http
