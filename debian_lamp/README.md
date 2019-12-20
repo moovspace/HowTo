@@ -18,13 +18,13 @@ su -
 ### Instalacja Lamp debian 10 (dla usera root bez: sudo)
 ```bash
 # Zainstaluj apache, php i mysql server
-sudo apt -y install apache2 mariadb-server 
-sudo apt -y install php libapache2-mod-php php-mysql php-pdo php-mbstring php-json 
+sudo apt -y install apache2 mariadb-server
+sudo apt -y install php libapache2-mod-php php-mysql php-pdo php-mbstring php-json
 sudo apt -y install php-opcache php-apcu php-imap php-curl
 
 # Development stuff
 sudo apt -y install git composer
- 
+
 # Dns utile, netstat
 sudo apt -y install dnsutils tcpdump unbound
 
@@ -82,7 +82,7 @@ sudo nano /etc/apache2/mods-enabled/dir.conf
 
 ### Dodaj virtualhosts z innej lokalizacji
 nano /etc/apache2/apache2.conf
-```bash 
+```bash
 # Virtual hosts
 IncludeOptional /home/usero/Www/virtualhost/*.conf
 
@@ -90,7 +90,7 @@ IncludeOptional /home/usero/Www/virtualhost/*.conf
 <Directory /home/usero/Www/>
         Options Indexes FollowSymLinks MultiViews
         DirectoryIndex index.php index.html
-        AllowOverride All 
+        AllowOverride All
         Require all granted
 </Directory>
 ```
@@ -111,9 +111,9 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
             DirectoryIndex index.php index.html
             Options Indexes FollowSymLinks MultiViews
             IndexIgnore *.sh *.htaccess
-            AllowOverride All 
+            AllowOverride All
             Require all granted
-        </Directory>      
+        </Directory>
 </VirtualHost>
 
 # Host wirtualny dla strony z ssl/tls
@@ -219,7 +219,7 @@ sudo nano /etc/apache2/mods-available/mpm_prefork.conf
 # MaxSpareServers: maximum number of server processes which are kept spare
 # MaxRequestWorkers: maximum number of server processes allowed to start
 # MaxConnectionsPerChild: maximum number of requests a server process serves
- 
+
 <IfModule mpm_prefork_module>
 	StartServers		   5
 	MinSpareServers		   5
@@ -266,7 +266,7 @@ sudo apachectl -M
 sudo nano /home/usero/Www/virtualhost/pages.conf
 ```conf
 # Add to virtualhosts
-<Proxy "fcgi://localhost:9000/" enablereuse=on max=10> 
+<Proxy "fcgi://localhost:9000/" enablereuse=on max=10>
 </Proxy>
 
 # Dodaj do virtualhosta każdej domeny
@@ -274,7 +274,7 @@ sudo nano /home/usero/Www/virtualhost/pages.conf
     # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
     # listen = 127.0.0.1:9000
     ## ProxyPassMatch ^/(.*\.php(/.*)?)$ fcgi://127.0.0.1:9000/home/usero/Www/html/test/$1
-    
+
     # Gdy w /etc/php/7.3/fpm/pool.d/www.conf jest:
     # listen = /run/php/php7.3-fpm.sock
     ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/run/php/php7.3-fpm.sock|fcgi://127.0.0.1:9000/home/usero/Www/html/test/
@@ -345,7 +345,7 @@ ProxyPreserveHost On
 # ProxyPass / http://127.0.0.1:8888/
 # ProxyPassReverse / http://127.0.0.1:9999/
 
-# Stats 
+# Stats
 <Location /balancer-manager>
     SetHandler balancer-manager
     Require all granted
@@ -415,6 +415,10 @@ thread_cache_size=4
 innodb_log_file_size=32M
 innodb_buffer_pool_size=256M
 
+# Index key size to 3072B
+innodb_large_prefix=1
+innodb_page_size=16KB
+
 # Dns
 skip-name-resolve=1
 performance_schema = ON
@@ -433,6 +437,20 @@ query_cache_limit=1M
 
 # Napraw
 # mysqlcheck -u root -p --auto-repair --optimize --all-databases
+```
+
+### Mysql keys error
+```bash
+#1071 - Specified key was too long; max key length is 767 bytes
+# Change 255 to 191 on the VARCHAR Or:
+SET GLOBAL innodb_file_format=Barracuda;
+SET GLOBAL innodb_file_per_table=1;
+SET GLOBAL innodb_large_prefix=1;
+# logout & login (to get the global values);
+ALTER TABLE tbl ROW_FORMAT=DYNAMIC;  -- (or COMPRESSED)
+# Or change index key size to 3072B
+innodb_large_prefix=1
+innodb_page_size=16KB
 ```
 
 ## Mysql cache
@@ -472,7 +490,7 @@ SET GLOBAL max_allowed_packet = 1000000000
 # Utwórz folder
 mkdir /home/usero/Www/mysql
 
-# Idź do 
+# Idź do
 cd /home/usero/Www/mysql
 
 # Backup bazy danych
@@ -501,7 +519,7 @@ sudo mysql -hlocalhost -uroot -phaslo < full-backup.sql
 # Utwórz folder
 mkdir /home/usero/Backup
 
-# Idź do 
+# Idź do
 cd /home/usero/Backup
 
 # Backup gzip
