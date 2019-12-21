@@ -32,17 +32,17 @@ http {
 
 			# Add cache zone
 			proxy_cache my_cache;
+			proxy_cache_valid any 5m;			
+			proxy_cache_min_uses 2;
 
 			# Settings			
 			proxy_cache_key "$host$request_uri$cookie_user";
-			proxy_cache_methods GET HEAD POST;
-			proxy_cache_valid any 10m;
-			proxy_cache_min_uses 2;
+			proxy_cache_methods GET HEAD POST;			
 			add_header X-Cache $upstream_cache_status;
 
 			# Enable caching, ignore proxy headers
 			# proxy_ignore_headers Cache-Control;
-			# proxy_ignore_headers CSet-Cookie;
+			# proxy_ignore_headers Set-Cookie;
 
 			# Tuning
 			# proxy_cache_revalidate on;
@@ -65,23 +65,15 @@ http {
 			fastcgi_index index.php;
 			include fastcgi_params;			
 
-			# Enable cache php
-			fastcgi_cache my_cache;			
-			fastcgi_cache_valid 200 60m;
+			# Enable php cache
+			fastcgi_cache my_cache;
+			fastcgi_cache_valid 200 5m;
+			fastcgi_cache_min_uses 2;
+		}
 
-			## Cache all
-			# set $no_cache 0;
-			# fastcgi_cache_bypass $no_cache;
-			# fastcgi_no_cache $no_cache;
-
-			# Dont get from cahce
-			# fastcgi_cache_bypass $cookie_nocache $arg_nocache$arg_comment;
-			# fastcgi_cache_bypass $http_pragma    $http_authorization;
-
-			# Dont cache variables
-			# fastcgi_no_cache $cookie_nocache $arg_nocache$arg_comment;
-			# fastcgi_no_cache $http_pragma    $http_authorization;
-
+		location /nocache {
+			add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+			expires off;
 		}
 
 		location /purge-cache {
