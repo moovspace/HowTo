@@ -1,7 +1,7 @@
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
-  	server_name _;    
+  	server_name _;
 
 	root /home/usero/Www/html/nginx;
 	index index.php index.html;
@@ -23,6 +23,9 @@ server {
 	location ~ /\.ht {
 		deny all;
 	}
+    location ~ /\.user.ini {
+		deny all;
+	}
 }
 
 # server {
@@ -36,20 +39,20 @@ server {
 server {
     listen 443 ssl http2 default_server;
     listen [::]:443 ssl http2 default_server;
-    server_name _;        
-    
-    # Document root        
+    server_name _;
+
+    # Document root
     root /home/usero/Www/html/nginx;
     index index.php index.html;
-    
+
     # Max upload size
     client_max_body_size 20M;
     keepalive_timeout 5m;
-    
+
     # Logs
     access_log   /var/log/nginx/nginx.log;
     error_log    /var/log/nginx/nginx.log error;
-    
+
     # Self-signed certs
     include /etc/nginx/snippets/snakeoil.conf;
 
@@ -61,10 +64,10 @@ server {
     location / {
         # Http2 auto push
         http2_push_preload on;
-        
+
         # Show files
         autoindex on;
-        
+
         # First attempt to serve request as file, then as directory, then fall back to displaying a 404.
 		# try_files $uri $uri/ =404;
 
@@ -76,11 +79,11 @@ server {
 	    # try_files $uri $uri/ /index.php$is_args$args;
         # try_files $uri $uri/ @missing;
     }
-    
+
     # Missing files
     location @missing {
         rewrite ^ $scheme://$host/index.php$is_args$args;
-    } 
+    }
 
     # Php files
     location ~ \.php$ {
@@ -93,7 +96,7 @@ server {
         # Tcp sockets
         # fastcgi_pass 127.0.0.1:9000;
     }
-    
+
     # Media
     location /media/ {
         # Show file list
@@ -101,7 +104,7 @@ server {
 
         # Default image error
         try_files $uri /media/default.gif;
-    }  
+    }
 
     # Redirect to image server
     location /images/ {
@@ -112,8 +115,8 @@ server {
         # proxy_pass http://images.example.com;
         # proxy_pass http://images.$host$request_uri;
     }
-    
-    # Static content    
+
+    # Static content
     location ~* \.(jpg|jpeg|gif|png|webp|pdf|svg|woff|woff2|ttf|css|ico|xml)$ {
         access_log        off;
         log_not_found     off;
@@ -132,7 +135,7 @@ server {
         # With load balancer
         proxy_pass http://backend;
 
-        # proxy_pass http://www.example.com/link/;        
+        # proxy_pass http://www.example.com/link/;
         # proxy_pass http://127.0.0.1:9999/proxy/;
 
         # proxy_set_header HOST $host;
@@ -141,7 +144,7 @@ server {
         # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         # proxy_set_header Accept-Encoding "";
     }
-    
+
     # Authentication
     # Create user password from terminal
     # sudo htpasswd -c /etc/nginx/.htpasswd user1
@@ -196,7 +199,7 @@ server {
 
 	root /home/usero/Www/html/nginx;
 	index index.php index.html;
-    
+
     location / {
         # try_files $uri $uri/ /index.php$is_args$args;
         # With load balancer
@@ -240,7 +243,7 @@ server {
 
 	root /home/usero/Www/html/nginx;
 	index index.php index.html;
-    
+
     location / {
 	   try_files $uri $uri/ /index.php$is_args$args;
     }
@@ -280,7 +283,7 @@ server {
 
 	root /home/usero/Www/html/nginx;
 	index index.php index.html;
-    
+
     location / {
 	   try_files $uri $uri/ /index.php$is_args$args;
     }

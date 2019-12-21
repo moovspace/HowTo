@@ -1,0 +1,68 @@
+http {
+	# Proxy servers
+	upstream backend {		
+		ip_hash;
+		server 127.0.0.1:9999 max_conns=100;
+		server 127.0.0.1:8888 max_conns=100;
+	}
+
+	# Enable cache zone
+	proxy_cache_path /tmp/nginx/cache levels=1:2 keys_zone=my_cache:10m max_size=1g inactive=30m use_temp_path=off;
+
+	server {
+
+		listen 80;
+		server_name localhost;
+		root /var/www/html/nginx
+
+		location / {
+			# Proxy server
+			proxy_pass http://localhost:8080;
+
+			# Proxy balancer
+			# proxy_pass http://backend;
+			
+			# Add cache zone
+			proxy_cache my_cache;
+
+			# Settings			
+			proxy_cache_key "$host$request_uri$cookie_user";
+			proxy_cache_methods GET HEAD POST;
+			proxy_cache_valid any 10m;
+			proxy_cache_min_uses 2;
+
+			# Tuning
+			# proxy_cache_revalidate on;
+	        # proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
+	        # proxy_cache_background_update on;
+	        # proxy_cache_lock on;
+	        # # proxy_cache_key $proxy_host$request_uri$cookie_phpsessionid;
+
+	        # Ignore proxy header
+	        # proxy_ignore_headers Cache-Control;
+
+	        # Clean cache
+			proxy_cache_purge $purge_method;
+		}
+
+		location /purge-cache {
+			# Clear cache
+			proxy_cache_path /tmp/nginx/cache levels=1:2 keys_zone=my_cache:10m purger=on;
+		}
+	}
+
+	# Clear cache: curl -X PURGE -D – "http://www.example.com/*"
+	map $request_method $purge_method {		
+		PURGE 1;
+		default 0;
+
+		# Or with geo
+		# PURGE   $purge_allowed;		
+	}
+
+	geo $purge_allowed {
+		default         0;  # deny from other
+		10.0.0.1        1;  # allow from localhost
+		192.168.0.0/24  1;  # allow from mask/24
+	}
+}
