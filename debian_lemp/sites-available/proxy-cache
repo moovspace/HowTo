@@ -15,21 +15,31 @@ http {
 		server_name localhost;
 		root /var/www/html/nginx
 
+		#Don't cache if there is a cookie called PHPSESSID
+		if ($http_cookie = "PHPSESSID")
+		{
+			# set $no_cache 1;
+		}
+
 		location / {
 			# Proxy server
 			proxy_pass http://localhost:8080;
 
 			# Proxy balancer
 			# proxy_pass http://backend;
-			
+
 			# Add cache zone
 			proxy_cache my_cache;
+
+			# php-fpm cache
+			fastcgi_cache_valid 200 60m;
 
 			# Settings			
 			proxy_cache_key "$host$request_uri$cookie_user";
 			proxy_cache_methods GET HEAD POST;
 			proxy_cache_valid any 10m;
 			proxy_cache_min_uses 2;
+			add_header X-Cache $upstream_cache_status;
 
 			# Tuning
 			# proxy_cache_revalidate on;
@@ -40,9 +50,28 @@ http {
 
 	        # Ignore proxy header
 	        # proxy_ignore_headers Cache-Control;
+	        # proxy_ignore_headers Set-Cookie;
 
 	        # Clean cache
 			proxy_cache_purge $purge_method;
+		}
+
+		location ~ \.php$ {
+			# if file not exist
+			try_files $uri =404;
+
+			# Php-fpm
+			fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+			fastcgi_index index.php;
+			include fastcgi_params;			
+
+			# Enable cache php
+			fastcgi_cache my_cache;
+			fastcgi_cache_valid 200 60m;
+
+			# Disable cache
+			# fastcgi_cache_bypass $no_cache;
+			# fastcgi_no_cache $no_cache;
 		}
 
 		location /purge-cache {
