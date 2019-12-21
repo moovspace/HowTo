@@ -1,3 +1,5 @@
+# By default, NGINX respects the Cache-Control headers from origin servers. It does not cache responses with Cache-Control set to Private, No- Cache, or No-Store or with Set-Cookie in the response header. NGINX only caches GET and HEAD client requests. You can override these defaults as described in the answers below.
+
 http {
 	# Proxy servers
 	upstream backend {		
@@ -31,9 +33,6 @@ http {
 			# Add cache zone
 			proxy_cache my_cache;
 
-			# php-fpm cache
-			fastcgi_cache_valid 200 60m;
-
 			# Settings			
 			proxy_cache_key "$host$request_uri$cookie_user";
 			proxy_cache_methods GET HEAD POST;
@@ -41,16 +40,17 @@ http {
 			proxy_cache_min_uses 2;
 			add_header X-Cache $upstream_cache_status;
 
+			# Enable caching, ignore proxy headers
+			# proxy_ignore_headers Cache-Control;
+			# proxy_ignore_headers CSet-Cookie;
+
 			# Tuning
 			# proxy_cache_revalidate on;
 	        # proxy_cache_use_stale error timeout updating http_500 http_502 http_503 http_504;
 	        # proxy_cache_background_update on;
-	        # proxy_cache_lock on;
+	        # proxy_cache_lock on;	        
 	        # # proxy_cache_key $proxy_host$request_uri$cookie_phpsessionid;
-
-	        # Ignore proxy header
-	        # proxy_ignore_headers Cache-Control;
-	        # proxy_ignore_headers Set-Cookie;
+	        # # proxy_cache_key "$http_x_auth_token$request_uri";
 
 	        # Clean cache
 			proxy_cache_purge $purge_method;
@@ -66,12 +66,22 @@ http {
 			include fastcgi_params;			
 
 			# Enable cache php
-			fastcgi_cache my_cache;
+			fastcgi_cache my_cache;			
 			fastcgi_cache_valid 200 60m;
 
-			# Disable cache
+			## Cache all
+			# set $no_cache 0;
 			# fastcgi_cache_bypass $no_cache;
 			# fastcgi_no_cache $no_cache;
+
+			# Dont get from cahce
+			# fastcgi_cache_bypass $cookie_nocache $arg_nocache$arg_comment;
+			# fastcgi_cache_bypass $http_pragma    $http_authorization;
+
+			# Dont cache variables
+			# fastcgi_no_cache $cookie_nocache $arg_nocache$arg_comment;
+			# fastcgi_no_cache $http_pragma    $http_authorization;
+
 		}
 
 		location /purge-cache {
