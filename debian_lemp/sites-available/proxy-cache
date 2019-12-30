@@ -32,7 +32,7 @@ http {
 
 			# Add cache zone
 			proxy_cache my_cache;
-			proxy_cache_valid any 5m;			
+			proxy_cache_valid any 5m;
 			proxy_cache_min_uses 2;
 
 			# Settings			
