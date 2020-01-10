@@ -45,6 +45,8 @@ gcc -x c++ hello.c -o hello
 
 ### SFML C++
 ```bash
+sudo apt-get install libsfml-dev
+
 g++ -c main.cpp
 g++ main.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
 ./sfml-app
@@ -105,7 +107,7 @@ void message::PrintMsg(){
 }
 ```
 
-### kompilacja
+### Kompilacja klasy
 ```bash
 g++ hello.cpp -o hello message.cpp message.h -Wall -Werror -pedantic
 ./hello
