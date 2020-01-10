@@ -86,6 +86,8 @@ nano message.cpp
 class message
 {
         public:
+		// Konstruktor
+		// message(){ /* code here */ }
                 static void PrintMsg();
 
 	protected:
