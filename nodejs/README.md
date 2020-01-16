@@ -13,6 +13,7 @@ sudo apt-cache policy nodejs
 
 # install nodejs wer. 9
 sudo apt install -y nodejs=9.11.2-1nodesource1
+sudo apt install -y --allow-downgrades nodejs=9.11.2-1nodesource1
 
 # install npm
 sudo apt install npm
