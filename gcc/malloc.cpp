@@ -20,5 +20,7 @@ int main ()
   printf ("Random string: %s\n",buffer);
   free (buffer);
 
+  // getchar();
+
   return 0;
 }

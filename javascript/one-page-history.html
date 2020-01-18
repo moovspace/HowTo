@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+    <meta name="author" content="John Doe">
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Cache-Control" content="post-check=0, pre-check=0">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+    <script>
+    document.title = 'Home page';
+
+    function wait(ms) {
+		var end = Date.now() + ms;		
+		while (Date.now() < end) continue
+		console.log(end);
+	}
+
+	window.onhashchange = function(e) {
+		console.log("Hash change");
+		console.log(history.state);
+		window.history.pushState(history.state, '', history.state.page);
+		document.title = history.state.title;
+		document.getElementById("root").innerHTML = '<p> Page content: ' + history.state.title + ' ' + history.state.page + '</p>';
+	}
+
+    window.onpopstate = function(event) {		
+		if(event.state !== null){
+			document.title = event.state.title;
+			console.log(event.state);
+			console.log("Location: " + document.location.href + ", state: " + JSON.stringify(event.state));			
+		}else{
+			document.title = 'Error 404!';
+		}		
+	}
+
+	// window.addEventListener('popstate', (event) => {
+	// 	console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
+	// });
+	
+	if (history.pushState) {
+		/*
+		window.history.pushState({page: "#page=1", user_id: 5, title: 'Page 1' }, '', "#page=1");
+		document.title = "Page 1";
+		console.log(history.state);
+		// wait(2000);
+		
+		window.history.pushState({page: "#page=2", user_id: 5, title: 'Page 2' }, '', "#page=2");
+		document.title = "Page 2";
+		console.log(history.state);
+		// wait(2000);
+
+		window.history.pushState({page: "#page=3", user_id: 5, title: 'Page 3' }, '', "#page=3");
+		document.title = "Page 3";
+		console.log(history.state);
+		// wait(2000);
+
+		// Trigger onpopstate
+		// let popStateEvent = new PopStateEvent('popstate', { state: state });
+		// dispatchEvent(popStateEvent);
+
+		// Replace history
+		// history.replaceState({page: 2, 'user_id': 5}, "title 2", "?page=2");
+		// console.log(history.state);
+
+		// History length
+		let numberOfEntries = window.history.length
+
+		if(numberOfEntries > 0){			
+			history.back();	
+			history.back();
+
+			// history.go(-1);
+			// history.back(); 
+			// history.back();
+			// history.go(-1);
+			// history.forward();			
+			// history.go(2);
+		}	
+		*/	
+
+	} else {
+		document.location.hash = "#error404";
+		document.title = "Error 404. Page does not exists!";
+	}
+
+	function processAjaxData(response, urlPath){
+		let state = {html: response.html, pageTitle: response.pageTitle};
+		// Content
+		document.getElementById("content").innerHTML = response.html;				
+		// New page		
+		window.history.pushState(state,"", urlPath);
+		document.title = response.pageTitle;
+		// Event
+		let popStateEvent = new PopStateEvent('popstate', { state: state });
+		dispatchEvent(popStateEvent);
+	}
+
+	var state = null;
+
+	function setPage(e){
+		e.preventDefault;
+		state = JSON.parse(e.getAttribute("state"));		
+
+		window.history.pushState(state, '', state.page);
+		document.title = state.title;
+
+		let popStateEvent = new PopStateEvent('popstate', { state: state });
+		dispatchEvent(popStateEvent);
+
+		// Load data with page url fetch(state.page);
+		document.getElementById("root").innerHTML = '<p> Page content: ' + state.title + ' ' + state.page + '</p>';
+	}
+
+	if(history.state == null){
+		"use strict";		
+		var deletingAll = browser.history.deleteAll();
+	}
+
+    </script>
+    <style type="text/css">
+    	a{cursor: pointer}
+    </style>
+</head>
+<body>
+	<!-- page links -->
+	<a state='{"page": "#page=1", "userid": 1, "title": "Page title 1"}' onclick="setPage(this);">Page 1</a>	
+	<a state='{"page": "#page=2", "userid": 2, "title": "Page title 2"}' onclick="setPage(this);">Page 2</a>	
+
+	<br><br>
+
+	<!-- Browser history -->
+	<a onclick="history.go(-1);">Back</a>
+	<a onclick="history.go(1);">Next</a>
+
+	<!-- page content -->
+	<div id="root">
+		<p>Home page</p>
+	</div>
+</body>
+</html>
