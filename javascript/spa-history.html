@@ -55,7 +55,7 @@
 				return;
 			}
 
-			window.history.pushState(state, '', state.page);
+			// window.history.pushState(state, '', state.page);
 			document.title = state.title;
 
 			let popStateEvent = new PopStateEvent('popstate', { state: state });
