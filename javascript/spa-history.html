@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Web tutorials">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+    <meta name="author" content="John Doe">
+
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Cache-Control" content="post-check=0, pre-check=0">
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+
+    <script>
+    let state = null;
+
+    class History
+    {
+    	constructor() {
+			this.url = '/';
+			document.title = '';
+
+			if (!history.pushState) {
+				document.location.hash = "#error404";
+				document.title = "Error 404. Page does not exists!";
+			}
+		}
+
+		static SetPage(e){
+			console.log(e);
+
+			e.preventDefault;
+			state = JSON.parse(e.getAttribute("state"));
+
+			window.history.pushState(state, '', state.page);
+			document.title = state.title;
+
+			let popStateEvent = new PopStateEvent('popstate', { state: state });
+			dispatchEvent(popStateEvent);
+
+			// Load data with page url fetch(state.page);
+			this.GetContent(state.page, new FormData());
+
+			// Show data
+			document.getElementById("root").innerHTML = '<p> Page content: ' + state.title + ' ' + state.page + '</p>';
+		}
+
+		static SetPageObj(state){
+			console.log(state);
+
+			if(state == null){
+				History.GetContent('/', new FormData());
+				return;
+			}
+
+			window.history.pushState(state, '', state.page);
+			document.title = state.title;
+
+			let popStateEvent = new PopStateEvent('popstate', { state: state });
+			dispatchEvent(popStateEvent);
+
+			// Load data with page url fetch(state.page);
+			this.GetContent(state.page, new FormData());
+
+			// Show data
+			document.getElementById("root").innerHTML = '<p> Page content: ' + state.title + ' ' + state.page + '</p>';
+		}
+
+		static GetContent(url, formdata){
+			// Send fetch
+			console.log("Loading page data ...");
+		}
+    }
+
+	window.onhashchange = function(e) {
+		console.log("Hash change");
+		console.log(history.state);		
+
+		History.SetPageObj(history.state);
+	}
+
+    window.onpopstate = function(e) {		
+		if(e.state !== null){
+			console.log("OnPopState Event");
+			document.title = e.state.title;		
+			console.log("Location: " + document.location.href + ", state: " + JSON.stringify(e.state));
+		}else{
+			document.title = 'Error 404!';
+		}		
+	}
+
+	// if(history.state == null){
+	// 	"use strict";		
+	// 	var deletingAll = history.deleteAll;
+	// }
+
+    </script>
+    <style type="text/css">
+    	a{cursor: pointer}
+    </style>
+</head>
+<body>
+	<!-- page links -->
+	<a state='{"page": "#page=1", "title": "Page title 1"}' onclick="History.SetPage(this);">Page 1</a>	
+	<a state='{"page": "#page=2", "title": "Page title 2"}' onclick="History.SetPage(this);">Page 2</a>
+	<a state='{"page": "#page=3", "title": "Page title 3"}' onclick="History.SetPage(this);">Page 3</a>
+	<a state='{"page": "#page=4", "title": "Page title 4"}' onclick="History.SetPage(this);">Page 4</a>	
+
+	<br><br>
+
+	<!-- Browser history -->
+	<a onclick="history.back();">Back</a>
+	<a onclick="history.forward();">Next</a>	
+
+	<!-- page content -->
+	<div id="root">
+		<p>The page content goes here</p>
+	</div>
+</body>
+</html>
