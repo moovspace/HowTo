@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Free Web tutorials">
-    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
-    <meta name="author" content="John Doe">
+    <meta name="description" content="SPA history pushState tutorials">
+    <meta name="keywords" content="HTML,CSS,JavaScript">
+    <meta name="author" content="">
 
 	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 	<meta http-equiv="Cache-Control" content="post-check=0, pre-check=0">
@@ -14,99 +14,100 @@
 	<meta http-equiv="Expires" content="0" />
 
     <script>
-    let state = null;
 
-    class History
-    {
-    	constructor() {
-			this.url = '/';
-			document.title = '';
+	    "use strict";
 
-			if (!history.pushState) {
-				document.location.hash = "#error404";
-				document.title = "Error 404. Page does not exists!";
-			}
-		}
+	    let state = null;
+	    
+	    if (!history.pushState) { alert('History Api not supported!'); }
 
-		static SetPage(e){
-			console.log(e);
+	    class History
+	    {
+	    	constructor() {}
 
-			e.preventDefault;
-			state = JSON.parse(e.getAttribute("state"));
-
-			window.history.pushState(state, '', state.page);
-			document.title = state.title;
-
-			let popStateEvent = new PopStateEvent('popstate', { state: state });
-			dispatchEvent(popStateEvent);
-
-			// Load data with page url fetch(state.page);
-			this.GetContent(state.page, new FormData());
-
-			// Show data
-			document.getElementById("root").innerHTML = '<p> Page content: ' + state.title + ' ' + state.page + '</p>';
-		}
-
-		static SetPageObj(state){
-			console.log(state);
-
-			if(state == null){
-				History.GetContent('/', new FormData());
-				return;
+			static SetIndexPage(url, title){
+				this.index = {};
+				this.index.title = title;
+				this.index.page = url;
 			}
 
-			// window.history.pushState(state, '', state.page);
-			document.title = state.title;
+			static SetPage(e){
+				console.log(e);
 
-			let popStateEvent = new PopStateEvent('popstate', { state: state });
-			dispatchEvent(popStateEvent);
+				e.preventDefault;
+				state = JSON.parse(e.getAttribute("state"));
 
-			// Load data with page url fetch(state.page);
-			this.GetContent(state.page, new FormData());
+				window.history.pushState(state, '', state.page);
+				document.title = state.title;
 
-			// Show data
-			document.getElementById("root").innerHTML = '<p> Page content: ' + state.title + ' ' + state.page + '</p>';
-		}
+				// let popStateEvent = new PopStateEvent('popstate', { state: state });
+				// dispatchEvent(popStateEvent);
 
-		static GetContent(url, formdata){
-			// Send fetch
-			console.log("Loading page data ...");
-		}
-    }
+				// Load data with page url fetch(state.page);
+				this.GetContent(state);
 
-	window.onhashchange = function(e) {
-		console.log("Hash change");
-		console.log(history.state);		
+				return this;
+			}
 
-		History.SetPageObj(history.state);
-	}
+			static SetPageObj(state){
+				console.log(state);
 
-    window.onpopstate = function(e) {		
-		if(e.state !== null){
-			console.log("OnPopState Event");
-			document.title = e.state.title;		
-			console.log("Location: " + document.location.href + ", state: " + JSON.stringify(e.state));
-		}else{
-			document.title = 'Error 404!';
-		}		
-	}
+				if(state == null){
+					console.log("Load homepage");
+					console.log(this.index);
+					this.GetContent(this.index);
+					return;
+				}
 
-	// if(history.state == null){
-	// 	"use strict";		
-	// 	var deletingAll = history.deleteAll;
-	// }
+				// let popStateEvent = new PopStateEvent('popstate', { state: state });
+				// dispatchEvent(popStateEvent);
+
+				// Load data with page url fetch(state.page);
+				this.GetContent(state);
+			}
+
+			// Fetch data from server here
+			static GetContent(state){
+				console.log("Loading page data ...");
+
+				document.title = state.title;
+				document.getElementById("root").innerHTML = '<p> Page content: ' + state.title + ' ' + state.page + '</p>';
+			}
+
+			static Init(){
+				window.onpopstate = function(e) {
+			    	console.log("OnPopState Event");
+
+					if(e.state !== null){
+
+					}else{
+
+					}		
+				}
+
+				window.onhashchange = function(e) {
+					console.log("Hash change");
+
+					History.SetPageObj(history.state);
+				}
+			}
+	    }
+	    
+	    // Run events
+	    History.Init();
 
     </script>
+
     <style type="text/css">
     	a{cursor: pointer}
     </style>
 </head>
 <body>
 	<!-- page links -->
-	<a state='{"page": "#page=1", "title": "Page title 1"}' onclick="History.SetPage(this);">Page 1</a>	
-	<a state='{"page": "#page=2", "title": "Page title 2"}' onclick="History.SetPage(this);">Page 2</a>
-	<a state='{"page": "#page=3", "title": "Page title 3"}' onclick="History.SetPage(this);">Page 3</a>
-	<a state='{"page": "#page=4", "title": "Page title 4"}' onclick="History.SetPage(this);">Page 4</a>	
+	<a state='{"page": "#page=1", "title": "Page title 1"}' onclick="History.SetPage(this).SetIndexPage('/','Homepage');">Page 1</a>	
+	<a state='{"page": "#page=2", "title": "Page title 2"}' onclick="History.SetPage(this).SetIndexPage('/','Homepage');">Page 2</a>
+	<a state='{"page": "#page=3", "title": "Page title 3"}' onclick="History.SetPage(this).SetIndexPage('/','Homepage');">Page 3</a>
+	<a state='{"page": "#page=4", "title": "Page title 4"}' onclick="History.SetPage(this).SetIndexPage('/','Homepage');">Page 4</a>	
 
 	<br><br>
 
