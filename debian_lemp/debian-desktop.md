@@ -30,7 +30,7 @@ exit
 
 ### Apt https
 ```bash
-sudo apt install apt-transport-https net-tools git curl openssl
+sudo apt install apt-transport-https net-tools git curl openssl mate-tweak
 sudo apt remove avahi-daemon
 sudo apt purge avahi-daemon
 sudo apt autoremove
@@ -115,6 +115,12 @@ server {
 }
 ```
 
+### Domain hosts for local domains
+sudo nano /etc/hosts
+```bash
+127.0.0.1 localhost domain.xx domain1.xx domain2.xx
+```
+
 ### Nginx Ssl, load balancer
 https://github.com/moovspace/HowTo/debian_lemp/ssl-virtual-host.sample
 
@@ -187,3 +193,10 @@ ip addr
 
 ### For more
 https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-debian-10
+
+
+### Bash prompt colored
+nano ~/.bashrc
+```bash
+export PS1="\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[32;47m\]\\$\[\e[m\] "
+```
