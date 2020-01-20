@@ -83,7 +83,7 @@ sudo chmod -R 775 /var/www/html
 ```
 
 ### Nginx virtualhost
-nano /etc/nginx/sites-available/default
+sudo nano /etc/nginx/sites-available/default
 ```bash
 server {
     listen 80;
