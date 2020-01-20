@@ -8,10 +8,79 @@ sudo apt-get install apache2-utils
 
 ### Instalacja
 ```bash
-sudo apt-get install nginx
+sudo apt-get install nginx php-fpm php-mysql php-gd php-json php-curl php-mbstring mariadb-server
+sudo mysql_secure_installation
+
+# Host folder
+mkdir -p /var/www/html/domain.xx
+
+# Permissions
+sudo chown -R $USER:$USER /var/www/html
+sudo chmod -R 775 /var/www/html
 ```
 
-### Aktywne połączenia 
+### Virtual hosts add to file
+nano /etc/nginx/sites-available/default
+```bash
+server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/html/domain.xx;
+    index index.php index.html index.htm;
+
+    server_name domain.xx;
+
+    location / {
+        # Get file or folder or error
+        # try_files $uri $uri/ =404;
+        
+        # Get file or folder or redirect uri to url param in index.php
+        try_files $uri $uri/ /index.php?q=$uri&$args;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.3-fpm.sock;
+
+        # Or sockets
+        # fastcgi_param HTTP_PROXY "";
+        # fastcgi_pass 127.0.0.1:9000;
+        # fastcgi_index index.php;        
+        # include fastcgi_params;
+    }
+}
+```
+
+### Enable virtual host domain
+```bash
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+
+# Test config
+sudo nginx -t
+
+# Restart server
+sudo systemctl reload nginx
+```
+
+### Mysql
+mysql -u root -p
+```sql
+# Database
+CREATE DATABASE example_database CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+SHOW DATABASES;
+
+# User
+GRANT ALL ON *.* TO 'root'@'localhost' IDENTIFIED BY 'toor' WITH GRANT OPTION;
+GRANT ALL ON *.* TO 'root'@'127.0.0.1' IDENTIFIED BY 'toor' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+```
+
+### For more
+https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mariadb-php-lemp-stack-on-debian-10
+
+
+## Aktywne połączenia (opcjonalnie)
 ```bash
 # Aktywne
 netstat -an | grep :80 | wc -l
