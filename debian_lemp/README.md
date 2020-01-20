@@ -6,6 +6,16 @@ ab -n 1000 -c 50 http://domain.xx
 sudo apt-get install apache2-utils
 ```
 
+### Add **user** to sudo ***(as root user)***
+nano /etc/sudoers
+```bash
+# Your username
+user ALL=(ALL:ALL) ALL
+
+CTRL-O
+CTRL-X
+```
+
 ### Instalacja
 ```bash
 sudo apt-get install nginx php-fpm php-mysql php-gd php-json php-curl php-mbstring mariadb-server
