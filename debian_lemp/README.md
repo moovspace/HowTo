@@ -62,6 +62,9 @@ server {
 }
 ```
 
+### Nginx virtualhost ssl, load balancer
+https://github.com/moovspace/HowTo/debian_lemp/ssl-virtual-host.sample
+
 ### Enable virtual host domain
 ```bash
 sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
