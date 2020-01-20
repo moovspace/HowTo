@@ -14,10 +14,18 @@ GRUB_DEFAULT=3
 sudo update-grub
 ```
 
-### Sudo user
-nano /etc/sudoers
+### Sudo user (as root user)
 ```bash
+su
+
+# in file
+nano /etc/sudoers
+
+# Add user to sudo
 user ALL=(ALL:ALL) ALL
+
+# Logout root
+exit
 ```
 
 ### Apt https
@@ -25,17 +33,17 @@ user ALL=(ALL:ALL) ALL
 sudo apt install apt-transport-https net-tools git curl openssl
 sudo apt remove avahi-daemon
 sudo apt purge avahi-daemon
-apt autoremove
-apt update
+sudo apt autoremove
+sudo apt update
 
 # check services
-netstat -tulpn
+sudo netstat -tulpn
 ```
 
 ### Sublime text 3
 ```bash
-wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+sudo wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+sudo echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
 sudo apt update
 sudo apt install sublime-text
 ```
@@ -61,6 +69,8 @@ Add new connection WiFi in NetworkManager (Mate right top corner) and set SSID a
 ### Lemp (as root user)
 ```bash
 su
+
+# Install
 apt install nginx php-fpm php-mysql php-gd php-json php-curl php-mbstring mariadb-server
 mysql_secure_installation
 
