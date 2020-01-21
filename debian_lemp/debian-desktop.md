@@ -1,6 +1,17 @@
 ### Create bootable USB from distro iso
 ```diff
-+ sudo  if=debian.iso of=/dev/sdb1
+# Login as root
+su
+
+# See partitions, disks
+fdisk -l
+df -h
+
+# Burn iso on usb
+dd  if=debian.iso of=/dev/sdb
+
+# Or (if install errors)
+dd  if=debian.iso of=/dev/sdb1
 ```
 
 ### Install debian 10
