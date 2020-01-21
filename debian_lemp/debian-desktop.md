@@ -241,7 +241,7 @@ export PS1="\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]
 
 ### Themes
 ```bash
-sudo spt install adapta-gtk-theme
+sudo apt install adapta-gtk-theme
 ```
 
 ### Icons
