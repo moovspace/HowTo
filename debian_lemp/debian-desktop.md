@@ -122,7 +122,7 @@ sudo nano /etc/hosts
 ```
 
 ### Nginx Ssl, load balancer
-https://github.com/moovspace/HowTo/debian_lemp/ssl-virtual-host.sample
+https://github.com/moovspace/HowTo/blob/master/debian_lemp/ssl-virtual-host.sample
 
 ### Enable nginx virtual host
 ```bash
@@ -196,7 +196,7 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-u
 
 
 ### Bash prompt colored
-nano ~/.bashrc
+cd; nano .bashrc
 ```bash
 export PS1="\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\w\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[32;47m\]\\$\[\e[m\] "
 ```
