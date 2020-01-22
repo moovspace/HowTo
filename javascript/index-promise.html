@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+<script>
+'use strict';
+
+function AsyncRequest(url = 'https://localhost') {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url);
+        xhr.withCredentials;
+        // Response ok
+        xhr.onload = () => resolve(xhr.responseText);
+        // Response error
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send();
+    });
+}
+
+AsyncRequest('https://jsonplaceholder.typicode.com/users/1')
+.then((data) => {
+    console.log("DATA 1" + data);
+    return data;
+})
+.then((data) => {
+    console.log("DATA 2" + data);
+})
+.then(() => {
+    throw new Error('Something failed'); // Custom error
+})
+.catch((err) => {
+    console.log('Handle rejected promise ('+err+') here.');
+})
+.then(() => {
+    console.log('Do this, no matter what happened before');
+});
+
+
+// Do some async jobs
+let promise = new Promise((resolve, reject) => {
+  // We call resolve(...) when what we were doing asynchronously was successful
+  // We call reject(...) when it failed.
+  setTimeout(function(){
+      resolve("Success!"); // Everything went well!
+  }, 2500);
+})
+
+promise.then((data) => {
+    console.log(data);
+})
+.catch((err) => {
+    console.log('Handle rejected promise ('+err+') here.');
+});
+
+/*
+$( document ).ready(function() {
+    console.log( "Ready !" );
+});
+*/
+</script>
+</head>
+<body>
+    <!-- onchange="handleFiles(this.files)" -->
+    <p style="box-sizing:border-box; width:100%; padding:10px; background: #09f; color: #fff;">Open console: CTRL + SHIFT + K or press F12</p>
+    <input type="file" id="input" multiple style="box-sizing:border-box; width:100%; padding:10px;">
+</body>
+</html>
