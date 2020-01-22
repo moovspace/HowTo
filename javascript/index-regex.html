@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<script>
+
+let re = /ab+c/;
+let re = new RegExp('ab+c');
+
+var myRe = /d(b+)d/g;
+var myArray = myRe.exec('cdbbdbsbz');
+var myArray = /d(b+)d/g.exec('cdbbdbsbz');
+
+var myRe = new RegExp('d(b+)d', 'g');
+var myArray = myRe.exec('cdbbdbsbz');
+var i = myRe.lastIndex;
+
+
+var re = /\w+\s/g;
+var str = 'fee fi fo fum';
+var myArray = str.match(re);
+console.log(myArray);
+var xArray; while(xArray = re.exec(str)) console.log(xArray);
+
+
+const str = 'table football';
+const regex = RegExp('foo*');
+const globalRegex = RegExp('foo*','g');
+console.log(regex.test(str));
+
+const paragraph = 'The quick brown fox jumps over the lazy dog. It barked.';
+const regex = /[A-Z]/g;
+const found = paragraph.match(regex);
+console.log(found);
+
+
+let str = "hey JudE"
+let re = /[A-Z]/g
+let re2 = /[.]/g
+console.log(str.search(re))   // returns 4, which is the index of the first capital letter "J"
+console.log(str.search(re2))  // returns -1 cannot find '.' dot punctuation
+
+
+var str = 'Twas the night before Xmas...';
+var newstr = str.replace(/xmas/i, 'Christmas');
+console.log(newstr);  // Twas the night before Christmas...
+
+
+const names = 'Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ;Chris Hand '
+console.log(names)
+const re = /\s*(?:;|$)\s*/
+const nameList = names.split(re)
+console.log(nameList)
+
+const myString = 'Hello World. How are you doing?'
+const splits = myString.split(' ', 3)
+console.log(splits)
+
+
+let regexp = /t(e)(st(\d?))/g;
+let str = 'test1test2';
+let array = [...str.matchAll(regexp)];
+
+
+/*
+$( document ).ready(function() {
+    console.log( "Ready !" );
+});
+*/
+</script>
+</head>
+<body>
+    <!-- onchange="handleFiles(this.files)" -->
+    <input type="file" id="input">
+
+</body>
+</html>
