@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Run after defer -->
+    <script type="module" src="module.js"></script>
+    <script async type="module" src="1.mjs"></script>
+	<script nomodule src="fallback.js"></script>
+
+	<!-- Run first. -->
+	<script defer src="2.js"></script>
+
+	<!-- This will not execute, as it fails a CORS check -->
+	<script type="module" src="https://….now.sh/no-cors"></script>
+
+	<!-- This will execute as it passes CORS checks -->
+	<script type="module" src="https://….now.sh/cors"></script>
+
+	<!-- This will not execute, as one of its imports fails a CORS check -->
+	<script type="module">
+	  import 'https://….now.sh/no-cors';
+
+	  // addTextToBody("This will not execute.");
+	</script>
+
+	<script>
+	/*
+	$( document ).ready(function() {
+	    console.log( "Ready !" );
+	});
+	*/
+	</script>
+</head>
+<body>
+	<!--
+		https://javascript.info/import-export#export-before-declarations
+		https://jakearchibald.com/2017/es-modules-in-browsers
+	-->
+
+    <!-- onchange="handleFiles(this.files)" -->
+    <p style="box-sizing:border-box; width:100%; padding:10px; background: #09f; color: #fff;">Open console: CTRL + SHIFT + K or press F12</p>
+    <input type="file" id="input" multiple style="box-sizing:border-box; width:100%; padding:10px;">
+</body>
+</html>
+
+// 📁 say.js
+
+function sayHi(user) {
+  alert(`Hello, ${user}!`);
+}
+function sayBye(user) {
+  alert(`Bye, ${user}!`);
+}
+export {sayHi, sayBye}; // a list of exported variables
+export class User {
+  constructor(name) {
+    this.name = name;
+  }
+}
+export let months = ['Jan', 'Feb', 'Mar','Apr', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+export const YEAR = 2020;
+
+// 📁 main.js
+import {sayHi, sayBye} from './say.js';
+sayHi('John'); // Hello, John!
+sayBye('John'); // Bye, John!
+
+// 📁 main.js
+import * as say from './say.js';
+say.sayHi('John');
+say.sayBye('John');
+
+// 📁 main.js
+import {sayHi as hi, sayBye as bye} from './say.js';
+
+
+// 📁 user.js
+export default class User { // just add "default"
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// 📁 main.js
+import User from './user.js'; // not {User}, just User
+new User('John');
