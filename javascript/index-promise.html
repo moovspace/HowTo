@@ -37,8 +37,8 @@ AsyncRequest('https://jsonplaceholder.typicode.com/users/1')
 });
 
 
-// Do some async jobs
-let promise = new Promise((resolve, reject) => {
+// Do some async jobs after time
+let job = new Promise((resolve, reject) => {
   // We call resolve(...) when what we were doing asynchronously was successful
   // We call reject(...) when it failed.
   setTimeout(function(){
@@ -46,12 +46,40 @@ let promise = new Promise((resolve, reject) => {
   }, 2500);
 })
 
-promise.then((data) => {
+job.then((data) => {
     console.log(data);
 })
 .catch((err) => {
     console.log('Handle rejected promise ('+err+') here.');
 });
+
+
+// Async wait
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+wait(5*1000).then(() => {
+    console.log("After 5 seconds");
+}).catch(() => {
+    console.log("Error");
+});
+
+
+// Async sample
+async function Do() {
+  try
+  {
+    const result = await doSomething();
+    const newResult = await doSomethingElse(result);
+    const finalResult = await doNext(newResult);
+    console.log(`Got the final result: ${finalResult}`);
+    return finalResult;
+  }
+  catch(error)
+  {
+    failureCallback(error);
+  }
+}
+
 
 /*
 $( document ).ready(function() {
