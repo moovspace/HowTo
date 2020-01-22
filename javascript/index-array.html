@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+<script>
+// Testowanie klasy
+let foo = "hello";
+foo instanceof String;
+
+// Testowanie typu
+if(typeof x === 'function'){}
+
+// call()
+function Product(name, price) {
+  this.name = name;
+  this.price = price;
+}
+function Food(name, price) {
+  Product.call(this, name, price);
+  this.category = 'food';
+}
+
+// Deklaracja i inicjalizacja (; - dodawany do końca linji)
+let arr = [1,4,7,99,22,3,44,15]
+// Inicjalizacja
+let ar = new Array("Hello", foo, 3.14159)
+// Pusta o długości 5 elementów
+ar = new Array(5);
+// Array from list
+ar = Array.from("1,2,3")
+// From iterrable
+ar = Array.from(new Set(["foo", window]))
+// From Map
+ar = Array.from(new Map([[1, 2], [2, 4], [4, 8]]))
+// From string -> letters
+ar = Array.from("foo")
+// From arrow function
+ar = Array.from([1, 2, 3], x => x + x);
+// Number sequence
+ar = Array.from({length: 9}, (v, k) => k);
+// Create array with elements
+ar = Array.of(1, 2, 3);
+
+// Czy tablica
+let ok = Array.isArray(new Array());
+ok = Array.isArray([]);
+
+// Ilość elementów
+console.log("Length " + arr.length);
+
+// Dodaj element na początku
+arr.unshift(123);
+
+// Dodaj element na końcu
+arr.push(11);
+
+// Pierwszy element
+let first = arr[0];
+
+// Usuń pierwszy
+arr.shift();
+
+// Ostatni
+let last = arr[arr.length - 1];
+
+// Usuń ostatni
+arr.pop();
+
+// Wyszukaj pozycję elementu
+let pos = arr.indexOf(99);
+
+// Usuń n elementów od pozycji
+let ile = 2;
+arr.splice(pos, ile);
+
+// Pobiera część tablicy
+arr.slice(2, 4)
+
+// Copy array
+var arr2 = arr.slice();
+
+// Array from regex
+let reg=/d(b+)(d)/i;
+let arr3 = reg.exec("cdbBdbsbz");
+
+//  Array foreach arrow function
+arr.forEach((val, index, arr) => {
+    console.log(val,index,arr);
+});
+
+// Połącz tablice
+let t1 = new Array("a", "b", "c");
+let t2 = new Array(1, 2, 3);
+let t3 = new Array(11, 22, 33);
+// Połącz tablice
+let t0 = t1.concat(t2,t3);
+
+// String z tablicy
+arr.toString()
+
+// Local encoding
+arr.toLocaleString('en', {timeZone: "UTC"});
+
+// Kopjowanie elementów
+arr.copyWithin(index, start, end);
+
+// Iterator
+let iter = arr.entries();
+console.log(iter.next().value);
+
+// Iterator
+iter = arr.values();
+for (const value of iter) { console.log(value); }
+
+// Every testuje każdy element
+arr.every((x) => x < 100);
+
+// Fill zmień elementy na
+arr.fill(6, start, end)
+// Zmien wszystkie
+arr.fill(6);
+
+// Filtruj elementy
+arr.filter(x => x.length > 1);
+
+// Wyszukaj wartosć pierwszego elementu
+arr.find(e => e > 11)
+
+// Znajduje index spełniający warunek
+arr.findIndex((x) => x > 33)
+
+// Flat połącz elementy rekursywnie
+let arr4 = [1, 2, [3, 4, [5, 6]]];
+arr4.flat(2); // [1, 2, 3, 4, 5, 6]
+
+// Flat map
+let arr5 = ["it's Sunny in", "", "California"];
+arr5.flatMap(x => x.split(" ")); // ["it's","Sunny","in", "", "California"]
+
+// Map
+let arr6 = ["it's Sunny in", "", "California"];
+arr6.map(x => x.split(" ")); // [["it's","Sunny","in"],[""],["California"]]
+arr.map(x => x * 2);
+
+// Reduce funkcja z każdym elementem
+arr.reduce((total, elval) => total + elval, 5); // 5 + 1 + 2 + 3 + 4
+
+// Reverse array elements
+arr.reverse();
+
+// Sprawdza czy conajmniej jeden element spełnia warunek
+arr.some((e) => e % 2 === 0)
+
+// Sortuje tablice rosnąco
+arr.sort();
+// malejąco
+arr.sort().reverse();
+// Liczby rosnąco
+arr.sort(function(a, b){return a - b});
+// Liczby malejąco
+arr.sort(function(a, b){return b - a});
+
+// Includes czy zawiera element
+arr.includes(2);
+
+// Znajduje pierwszy index
+arr.indexOf(11, 0) // "co" , from
+arr.lastIndexOf(11, 0)
+
+// String from array
+arr.join('-')
+
+// Keys Iterator keys
+let iterator = arr.keys();
+for (const key of iterator) { console.log(key); }
+
+/*
+$( document ).ready(function() {
+    console.log( "Ready !" );
+});
+*/
+</script>
+</head>
+</html>
