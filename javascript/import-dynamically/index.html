@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<!--
+    <script type="module" src="module.js"></script>
+	<script type="module" async src="async.js"></script>
+	<script nomodule src="fallback.js"></script>
+	<script src="fallback.js"></script>
+-->
+
+<script>
+class Import {
+    Variable = null;    
+
+    construct(){}
+
+    static async Component(file, params){
+        // let module = await import(file);
+
+        let res = '';
+
+        // Import
+        await import(file).then((module) => {
+            res = module.DoIt(); // Do job from module
+        }).catch(err => {            
+            console.log(err);
+        });
+
+        return res;
+    }    
+}
+
+// Import class component
+Import.Component('./module.js', []).then((msg) => {
+    console.log("Server say: ", JSON.parse(msg));
+});
+
+// JavaScript
+(function() {
+    // Code here
+})();
+
+/*
+// jQuery
+$( document ).ready(function() {
+    console.log( "Ready !" );
+});
+*/
+</script>
+</head>
+<body>
+    <!-- onchange="handleFiles(this.files)" -->
+    <p style="box-sizing:border-box; width:100%; padding:10px; background: #09f; color: #fff;">Open console: CTRL + SHIFT + K or press F12</p>
+    <input type="file" id="input" multiple style="box-sizing:border-box; width:100%; padding:10px;">
+</body>
+</html>
