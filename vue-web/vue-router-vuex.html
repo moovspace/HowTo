@@ -1,0 +1,159 @@
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+<script src="https://unpkg.com/vuex/dist/vuex.js"></script>
+
+<div id="app">
+  <h1>Hello App!</h1>
+  <p>
+    <!-- <router-link> will be rendered as an `<a>` tag by default -->
+    <router-link to="/foo">Go to Counter Component</router-link>
+    <router-link to="/bar">Go to Vuex</router-link>
+  </p>
+  <!-- route outlet -->
+  <!-- component matched by the route will render here -->
+  <router-view></router-view>
+</div>
+
+<script>
+// Vuex part
+const store = new Vuex.Store({
+	state: {
+		message: 'Hello Space from Vuex',
+		count: 0
+	},
+	getters: {
+		message(state) {
+			return state.message.toLowerCase();
+		},
+		counter(state) {
+			return state.count;
+		}
+	},
+	actions: {
+		// Asynch
+		async increment(state, val) {
+			// Async load data form server here
+			// await fetch("get data").then("update val")
+			state.commit('increment', val);
+		}
+	},
+	mutations: {
+		// Synch
+		increment(state, val) {
+			state.count += parseInt(val);
+		}
+	}
+});
+
+// Router vue part
+const Foo = { template: '<div>foo <button-counter /> </div>' }
+const Bar = { 
+	data () {
+		return {
+			welcome: "Hello Space"
+		}
+	},
+	// For template variables
+	computed: {
+		message() {
+			// return store.state.message;
+			// With getters
+			return store.getters.message;
+		},
+		count() {			
+			return store.getters.counter;
+		}
+	},
+	// For template actions
+	methods: {
+		pushnow() {
+			console.log("Pressed!");
+			
+			// Synch
+			// store.commit("increment", 1);
+			
+			// Async
+			store.dispatch('increment', 1);
+		}
+	},	
+	watch: {
+		firstName: function (val) {
+		    this.fullName = val + ' ' + this.lastName
+		},
+		lastName: function (val) {
+		    this.fullName = this.firstName + ' ' + val
+		}
+	},
+	// mounted, updated, and destroyed
+	created: function () {
+		// `this` points to the app instance
+		console.log('a is: ' + this.o1)
+	},
+	template: '<div> <h1> {{ welcome }} </h1> <h2> {{ message }} </h2> <h3> {{ count }} </h3> <button @click="pushnow"> Add +1</button> </div>' 
+}
+
+// Add data
+// Vue.set(app.o1, 'age', 27)
+
+const routes = [
+  { path: '/foo', component: Foo },
+  { path: '/bar', component: Bar }
+]
+
+const router = new VueRouter({
+  routes
+})
+
+
+// Component sample
+const Component1 = Vue.component('button-counter', {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+});
+
+const Component2 = Vue.component('base-checkbox', {
+  model: {
+    prop: 'checked',
+    event: 'change'
+
+  },
+  props: {
+    checked: Boolean
+  },
+  template: `
+    <input
+      type="checkbox"
+      v-bind:checked="checked"
+      v-on:change="$emit('change', $event.target.checked)"
+    >
+  `
+})
+
+/*
+components: {
+	'comp1': Component1,
+	'comp2': Component2
+}
+*/
+
+const app = new Vue({
+	router,
+  	components: {
+		'comp1': Component1,
+		'comp2': Component2
+	}
+}).$mount('#app')
+
+// Now the app has started!
+</script>
+
+<style type="text/css">
+.router-link-active {
+  color: red;
+}
+
+</style>
