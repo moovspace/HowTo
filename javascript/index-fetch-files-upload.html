@@ -90,8 +90,14 @@
         PostData('https://jsonplaceholder.typicode.com/posts', { mydata: 42 }).then((data) => {
             console.log(data) // JSON data parsed by `response.json()` call
         })
+        
+        // JS form with files
+        // var form = document.querySelector("form");
+        // let fd = new FormData(form);
 
+        // Or jQuery
         // let fd = new FormData($("#form")[0]); // form files
+
         let fd = new FormData()
         fd.append("title", "Hello world")
 
